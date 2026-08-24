@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Material informativ despre vitalitatea masculină, energia zilnică și afirmațiile despre așa-numitul truc al calului."
+    />
+    <title>
+      Trucul calului de 7 secunde — Ghid despre vitalitatea masculină
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Editorial-style sponsored health-information page; no promises or sexualized imagery. */
+      :root {
+        --paper: #fffdf8;
+        --ink: #20211f;
+        --muted: #686963;
+        --rule: #d8d4cb;
+        --red: #b92e2b;
+        --red-dark: #921f1d;
+        --soft: #f3f0e9;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font:
+          19px/1.68 "Source Sans 3",
+          Arial,
+          sans-serif;
+      }
+      a {
+        color: inherit;
+      }
+
+      .topline {
+        height: 5px;
+        background: var(--red);
+      }
+      .masthead {
+        width: min(980px, calc(100% - 32px));
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 0 18px;
+        border-bottom: 1px solid var(--ink);
+      }
+      .brand {
+        font:
+          700 20px/1 "Libre Baskerville",
+          Georgia,
+          serif;
+        letter-spacing: -0.04em;
+      }
+      .brand small {
+        display: block;
+        margin-top: 5px;
+        color: var(--red);
+        font:
+          700 10px/1 "Source Sans 3",
+          sans-serif;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .article {
+        width: min(760px, calc(100% - 32px));
+        margin: auto;
+        padding: 43px 0 68px;
+      }
+      .category {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 17px;
+        color: var(--red);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .category::before {
+        content: "";
+        width: 34px;
+        height: 3px;
+        background: var(--red);
+      }
+      h1,
+      h2 {
+        font-family: "Libre Baskerville", Georgia, serif;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(34px, 5.2vw, 55px);
+        line-height: 1.18;
+        letter-spacing: -0.045em;
+      }
+      h2 {
+        margin: 38px 0 14px;
+        font-size: 29px;
+        line-height: 1.35;
+      }
+      .subtitle {
+        margin: 20px 0 22px;
+        color: #4b4d47;
+        font:
+          italic 20px/1.62 "Libre Baskerville",
+          Georgia,
+          serif;
+      }
+      .byline {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin: 0 0 28px;
+        padding: 15px 0;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--red);
+      }
+      p {
+        margin: 0 0 22px;
+      }
+      .lead {
+        font-size: 22px;
+        line-height: 1.63;
+      }
+      .lead strong {
+        color: #111;
+      }
+
+      .video-card {
+        margin: 37px 0;
+        padding: 31px 30px;
+        border: 1px solid #d6d0c3;
+        background: var(--soft);
+        text-align: center;
+      }
+      .video-card h2 {
+        margin: 0 0 10px;
+        font-size: 28px;
+      }
+      .video-card p {
+        max-width: 550px;
+        margin: 0 auto 22px;
+        color: #50524d;
+        font-size: 18px;
+      }
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 13px;
+        min-height: 58px;
+        padding: 16px 26px;
+        border-radius: 3px;
+        background: var(--red);
+        color: #fff;
+        box-shadow: 0 5px 14px rgba(112, 28, 25, 0.22);
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        transition:
+          transform 0.16s ease,
+          background 0.16s ease;
+      }
+      .cta:hover {
+        background: var(--red-dark);
+        transform: translateY(-2px);
+      }
+      .cta:active {
+        transform: scale(0.97);
+      }
+      .cta-note {
+        display: block;
+        margin-top: 11px;
+        color: #777a72;
+        font-size: 12px;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .cta {
+          animation: pulse 2.3s ease-in-out infinite;
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 5px 14px rgba(112, 28, 25, 0.22);
+        }
+        50% {
+          box-shadow: 0 7px 23px rgba(185, 46, 43, 0.4);
+        }
+      }
+
+      .horse-feature {
+        margin: 38px -44px 34px;
+      }
+      .horse-feature img {
+        display: block;
+        width: 100%;
+        height: 360px;
+        object-fit: cover;
+        filter: saturate(0.9) contrast(1.03);
+      }
+      .horse-feature figcaption {
+        padding: 9px 0;
+        color: #777a72;
+        font-size: 12px;
+      }
+
+      .pull {
+        margin: 35px 0;
+        padding: 25px 27px;
+        border-left: 5px solid var(--red);
+        background: var(--soft);
+        font:
+          italic 23px/1.5 "Libre Baskerville",
+          Georgia,
+          serif;
+      }
+      .pull strong {
+        color: var(--red);
+      }
+      .text-link {
+        color: var(--red);
+        font-size: 16px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .text-link:hover {
+        text-decoration: underline;
+      }
+
+      .topic-card {
+        margin: 40px 0;
+        padding: 25px 27px;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        background: var(--soft);
+      }
+      .topic-card h2 {
+        margin: 0 0 11px;
+        font-size: 25px;
+      }
+      .topic-card p {
+        margin: 0 0 16px;
+        color: #50524d;
+        font-size: 17px;
+      }
+
+      .short-list {
+        margin: 25px 0;
+        padding: 0;
+        list-style: none;
+      }
+      .short-list li {
+        position: relative;
+        margin: 0 0 14px;
+        padding-left: 25px;
+      }
+      .short-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.64em;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--red);
+      }
+      .notice {
+        margin: 42px 0 0;
+        padding: 20px 22px;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        color: #5d5f59;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+      .notice strong {
+        color: #333;
+      }
+
+      .footer {
+        background: #272825;
+        color: #d1d2cc;
+      }
+      .footer__inner {
+        width: min(980px, calc(100% - 32px));
+        margin: auto;
+        padding: 41px 0 32px;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 60px;
+        padding-bottom: 26px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.17);
+      }
+      .footer h3 {
+        margin: 0 0 11px;
+        color: #fff;
+        font-size: 14px;
+      }
+      .footer p,
+      .footer li,
+      .footer a {
+        margin: 0;
+        color: #d1d2cc;
+        font-size: 12px;
+        line-height: 1.86;
+      }
+      .footer ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .footer a {
+        text-decoration: none;
+      }
+      .footer a:hover {
+        color: #fff;
+      }
+      .legal {
+        padding-top: 24px;
+        color: #a6a8a0;
+        font-size: 10px;
+        line-height: 1.82;
+      }
+      .legal p {
+        font-size: 10px;
+      }
+      .legal strong {
+        color: #e6e7e0;
+      }
+
+      @media (max-width: 700px) {
+        body {
+          font-size: 18px;
+        }
+        .meta {
+          display: none;
+        }
+        .article {
+          padding-top: 32px;
+        }
+        .lead {
+          font-size: 20px;
+        }
+        .horse-feature {
+          margin: 32px 0 28px;
+        }
+        .horse-feature img {
+          height: 270px;
+        }
+        h2 {
+          font-size: 26px;
+        }
+        .pull {
+          padding: 22px;
+          font-size: 20px;
+        }
+        .video-card {
+          padding: 28px 20px;
+        }
+        .cta {
+          width: 100%;
+          font-size: 17px;
+        }
+        .topic-card {
+          padding: 22px;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 23px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topline"></div>
+    <header class="masthead">
+      <div class="brand">
+        Ghidul Sănătății Bărbaților<small>material informativ</small>
+      </div>
+      <div class="meta">CONȚINUT SPONSORIZAT · <span id="date"></span></div>
+    </header>
+
+    <main class="article">
+      <article>
+        <div class="category">VITALITATE MASCULINĂ</div>
+        <h1>
+          Trucul calului de 7 secunde: ce trebuie să știi despre vitalitatea
+          masculină
+        </h1>
+        <p class="subtitle">
+          O prezentare informativă despre vitalitatea masculină, energia zilnică
+          și întrebările pe care merită să le discuți cu un profesionist
+          medical.
+        </p>
+        <div class="byline">
+          <span class="dot"></span
+          ><span>Redacția Ghidului Sănătății Bărbaților</span><span>·</span
+          ><span>Timp de citire: 2 minute</span>
+        </div>
+
+        <figure class="horse-feature">
+          <!-- Troque href="#" pela URL final quando ela estiver disponível. -->
+          <a
+            href="https://lp.massimus.shop/preclick"
+            aria-label="Deschide prezentarea despre trucul calului de 7 secunde"
+          >
+            <img
+              src="media/horse-curious-stable.png"
+              alt="Cal maro care mănâncă gelatină roșie într-un grajd"
+              loading="lazy"
+            />
+          </a>
+          <figcaption>
+            O imagine editorială despre curiozitatea din jurul așa-numitului
+            „truc al calului”.
+          </figcaption>
+        </figure>
+
+        <p class="lead">
+          <strong
+            >Vitalitatea masculină poate fi influențată de mai mulți
+            factori.</strong
+          >
+          Stresul, somnul, alimentația, mișcarea și starea generală de bine pot
+          avea un rol important. Informațiile clare sunt mai utile decât
+          promisiunile despre soluții rapide.
+        </p>
+        <section class="video-card">
+          <h2>
+            Vezi prezentarea despre „trucul calului de 7 secunde” și vitalitatea
+            masculină.
+          </h2>
+          <p>
+            Materialul discută energia zilnică, stilul de viață și de ce
+            afirmațiile despre soluții rapide trebuie evaluate cu prudență.
+          </p>
+          <a class="cta" href="https://lp.massimus.shop/preclick"
+            >VEZI PREZENTAREA →</a
+          >
+          <span class="cta-note"
+            >Material informativ; nu înlocuiește consultul medical.</span
+          >
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer-grid">
+          <div>
+            <h3>Informații despre companie</h3>
+            <p>
+              <strong>PARTE CONTRACTANTĂ:</strong> DIGITAL SOLUTIONS LTDA<br /><strong
+                >CNPJ:</strong
+              >
+              97.552.676/0001-20<br /><strong>Adresă:</strong> Av. Paulista,
+              1578, Sala 302, CEP 01.310-200, São Paulo/SP<br /><strong
+                >Email:</strong
+              >
+              contato@digitalsolutions.com.br
+            </p>
+          </div>
+          <div>
+            <h3>Informații</h3>
+            <ul>
+              <li><a href="terms.html">Termeni de utilizare</a></li>
+              <li><a href="privacy.html">Politica de confidențialitate</a></li>
+              <li>
+                <a href="mailto:contato@digitalsolutions.com.br">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="legal">
+          <p>
+            <strong>DECLARAȚIE IMPORTANTĂ:</strong> Acest site are scop general
+            informativ. Nu reprezintă sfat medical, juridic, financiar,
+            educațional sau personalizat. Conținutul nu garantează niciun
+            rezultat specific. © 2026 Toate drepturile rezervate.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("date").textContent =
+        new Date().toLocaleDateString("ro-RO", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+    </script>
+    <script
+      type="text/javascript"
+      src="https://lp.massimus.shop/pretrack.js?rtkcmpid=6a8cbca4f03c7a9c1cf0a28b"
+    ></script>
+  </body>
+</html>
