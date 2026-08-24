@@ -727,7 +727,7 @@
           <div class="pricing-container">
             <a
               class="card"
-              href="https://trk.purehealthnest.site/click/1"
+              href="https://lp.massimus.shop/click/1"
               aria-label="Cumpără 1 flacon de Booster-T"
             >
               <div class="card-inner">
@@ -764,7 +764,7 @@
 
             <a
               class="card featured"
-              href="https://trk.purehealthnest.site/click/3"
+              href="https://lp.massimus.shop/click/3"
               aria-label="Cumpără 5 flacoane de Booster-T"
             >
               <div class="card-inner">
@@ -802,7 +802,7 @@
 
             <a
               class="card"
-              href="https://trk.purehealthnest.site/click/2"
+              href="https://lp.massimus.shop/click/2"
               aria-label="Cumpără 3 flacoane de Booster-T"
             >
               <div class="card-inner">
@@ -850,5 +850,33 @@
     <script src="js/track_1.js" defer></script>
     <script src="js/track.js" defer></script>
     <script src="js/pixel.js" defer></script>
+    <script src="https://sphereaffiliate.com/api/public/tracker.js" async></script>
+<script>
+  (function() {
+    document.addEventListener("DOMContentLoaded", function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (Array.from(urlParams).length === 0) return;
+      document.querySelectorAll("a").forEach(link => {
+        try {
+          const href = link.getAttribute("href");
+
+          if (!href  href.startsWith("#") 
+ href.startsWith("javascript:")) return;
+
+          const linkUrl = new URL(href, window.location.origin);
+
+          urlParams.forEach((value, key) => {
+            if (!linkUrl.searchParams.has(key)) {
+              linkUrl.searchParams.set(key, value);
+            }
+          });
+          link.setAttribute("href", linkUrl.toString());
+        } catch (e) {
+        }
+      });
+    });
+  })();
+</script>
+    <script type="text/javascript" src="https://lp.massimus.shop/track.js?rtkcmpid=6a8cbca4f03c7a9c1cf0a28b"></script>
   </body>
 </html>
