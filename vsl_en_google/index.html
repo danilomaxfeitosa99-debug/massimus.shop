@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>7 seconds</title>
+    <style>
+      :root {
+        --black: #050505;
+        --ink: #151515;
+        --muted: #686868;
+        --red: #e53935;
+        --red-dark: #a71918;
+        --line: #dedede;
+        --soft: #f2f2f2;
+        --green: #2f7857;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: #000;
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .container {
+        width: min(1120px, calc(100% - 28px));
+        margin: 0 auto;
+      }
+      .top-alert {
+        min-height: 50px;
+        background: #d20d12;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 18px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .site-header {
+        display: none;
+        height: 66px;
+        background: #fff;
+        grid-template-columns: 48px 1fr 48px;
+        align-items: center;
+        text-align: center;
+        border-bottom: 1px solid #ececec;
+      }
+      .site-header h1 {
+        font-size: 22px;
+        letter-spacing: 2px;
+        margin: 0;
+        font-weight: 900;
+      }
+      .site-header button {
+        border: 0;
+        background: transparent;
+        font-size: 24px;
+        color: #333;
+      }
+      .marquee {
+        display: none;
+        height: 34px;
+        background: var(--black);
+        color: #fff;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        align-items: center;
+      }
+      .marquee span {
+        display: inline-block;
+        min-width: 100%;
+        animation: scroll 26s linear infinite;
+      }
+      @keyframes scroll {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-100%);
+        }
+      }
+      .video-section {
+        background: #000;
+        padding: 42px 0 40px;
+      }
+      .esconder {
+        display: none;
+      }
+      html body script,
+      html body style {
+        display: none !important;
+      }
+      html body .site-header,
+      html body .marquee {
+        display: none !important;
+      }
+      .hero-headline {
+        max-width: 1080px;
+        margin: 0 auto 42px;
+        color: #fff;
+        text-align: center;
+        font-size: 44px;
+        line-height: 1.18;
+        font-weight: 900;
+      }
+      .hero-headline .accent {
+        color: #ff8d1c;
+      }
+      .video-wrap {
+        width: min(400px, 100%);
+        margin: 0 auto;
+        background: #b3060b;
+        border-radius: 0;
+        overflow: hidden;
+        box-shadow: none;
+      }
+      .video-wrap vturb-smartplayer {
+        display: block;
+        width: 100%;
+      }
+      .video-placeholder {
+        aspect-ratio: 9/16;
+        background: #b3060b;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 13px;
+        text-align: center;
+        padding: 20px;
+      }
+      .video-caption {
+        max-width: 560px;
+        margin: 18px auto 0;
+        text-align: center;
+        color: #555;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      .offer {
+        background: #414141;
+        color: #fff;
+        padding: 22px 0 26px;
+        text-align: center;
+      }
+      .offer p {
+        margin: 0 0 4px;
+        color: #ffeb00;
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .offer h2 {
+        margin: 0;
+        font-size: 30px;
+        line-height: 1.15;
+      }
+      .timer {
+        margin: 10px auto 0;
+        color: #fff;
+        font-size: 36px;
+        font-weight: 900;
+        letter-spacing: 1px;
+      }
+      .products {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(168deg, #111 0 12%, #fff 12.1% 100%);
+        padding: 42px 0 52px;
+      }
+      .pricing-container {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 28px;
+      }
+      .card {
+        position: relative;
+        display: flex;
+        flex: 1;
+        max-width: 340px;
+        background: #fff;
+        border: 3px solid #202020;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 9px 18px #0002;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 24px #0003;
+      }
+      .card.featured {
+        border: 3px solid #e1b72c;
+        transform: scale(1.06);
+        z-index: 2;
+        flex-basis: 360px;
+        background: linear-gradient(
+          180deg,
+          #f04449 0,
+          #ce252b 58%,
+          #211818 100%
+        );
+        color: #fff;
+      }
+      .card.featured:hover {
+        transform: scale(1.08);
+      }
+      .card-inner {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 10px 17px;
+      }
+      .card-label {
+        width: calc(100% + 20px);
+        margin: 0 -10px 12px;
+        padding: 9px 6px;
+        background: #1b1b1b;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 0.3px;
+        text-transform: none;
+      }
+      .card.featured .card-label {
+        background: #fff;
+        color: #222;
+        border-bottom: 3px solid #e1b72c;
+        text-transform: uppercase;
+      }
+      .card h3 {
+        font-size: 34px;
+        line-height: 1;
+        margin: 0 0 2px;
+        text-transform: uppercase;
+      }
+      .supply {
+        font-size: 17px;
+        color: #222;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+      }
+      .card.featured .supply {
+        color: #fff;
+      }
+      .product-img {
+        width: 235px;
+        height: 235px;
+        object-fit: contain;
+        margin: 4px auto 2px;
+        display: block;
+      }
+      .card:not(.featured) .product-img {
+        width: 205px;
+        height: 205px;
+      }
+      .price-old {
+        font-size: 15px;
+        color: #888;
+        text-decoration: line-through;
+        text-decoration-color: var(--red);
+        text-decoration-thickness: 2px;
+        margin-right: 5px;
+      }
+      .total-price {
+        font-size: 0;
+        font-weight: 900;
+        margin: 2px 0 3px;
+      }
+      .total-price .price-old {
+        display: none;
+      }
+      .unit-price {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        line-height: 1;
+        color: #202020;
+        margin-bottom: 10px;
+      }
+      .card.featured .unit-price {
+        color: #fff;
+      }
+      .currency {
+        font-size: 28px;
+        font-weight: 900;
+        align-self: flex-end;
+        margin: 0 0 10px 7px;
+      }
+      .number {
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: -3px;
+      }
+      .per-unit {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        align-self: flex-end;
+        margin: 0 0 9px 3px;
+      }
+      .benefits {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 12px;
+      }
+      .benefit {
+        padding: 7px 4px;
+        border-radius: 0;
+        border-top: 1px dashed #bcbcbc;
+        color: #e12c32;
+        background: transparent;
+        font-size: 12px;
+        font-weight: 900;
+        line-height: 1.1;
+      }
+      .benefit.red,
+      .benefit.black,
+      .benefit.green {
+        background: transparent;
+      }
+      .card.featured .benefit {
+        color: #ffe275;
+        border-top-color: #ffffff66;
+      }
+      .card.featured .benefit.green {
+        color: #fff;
+      }
+      .buy {
+        width: 96%;
+        border: 0;
+        border-radius: 9px;
+        background: linear-gradient(#e63237, #bd1e24);
+        box-shadow: 0 5px 0 #a3161b;
+        color: #fff;
+        padding: 11px 8px;
+        font-size: 20px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .card.featured .buy {
+        background: linear-gradient(#f1c73b, #bf8d12);
+        box-shadow: 0 5px 0 #8d6710;
+        color: #111;
+      }
+      .buy:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #9a691b;
+      }
+      .payment {
+        width: 125px;
+        height: 26px;
+        object-fit: contain;
+        margin-top: 10px;
+      }
+      .shipping {
+        font-size: 12px;
+        color: #555;
+        margin-top: 7px;
+      }
+      .card.featured .shipping {
+        color: #ffe275;
+      }
+      .fb-comments {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+        max-width: 650px;
+        margin: 0 auto;
+      }
+      .fb-comments-header {
+        display: none;
+      }
+      .fb-comments-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 17px;
+      }
+      .fb-comment {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        align-items: start;
+        gap: 14px;
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 16px #00000012;
+      }
+      .fb-avatar {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        border-radius: 50%;
+        display: block;
+        object-fit: cover;
+      }
+      .fb-comment-body {
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+        color: #071b2b;
+        line-height: 1.48;
+      }
+      .fb-name {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 15px;
+        margin: 3px 0 0;
+      }
+      .fb-verified {
+        color: #2696a7;
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .fb-stars {
+        color: #f5a623;
+        font-size: 18px;
+        letter-spacing: 1px;
+        line-height: 1;
+        margin: 13px 0 8px;
+      }
+      .fb-text {
+        display: block;
+        font-size: 15px;
+      }
+      .fb-footer {
+        display: none;
+      }
+      .comments-section {
+        background: #ededed;
+        padding: 36px 0;
+      }
+      .customer-proof {
+        max-width: 860px;
+        margin: 0 auto 24px;
+        background: #fff;
+        border-radius: 14px;
+        padding: 16px;
+        box-shadow: 0 3px 12px #0001;
+      }
+      .customer-proof h3 {
+        margin: 0 0 5px;
+        text-align: center;
+        font-size: 22px;
+        text-transform: none;
+      }
+      .customer-proof p {
+        margin: 0 0 14px;
+        text-align: center;
+        color: #555;
+        font-size: 13px;
+      }
+      .customer-proof-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 14px;
+      }
+      .customer-proof-grid img {
+        display: block;
+        width: 100%;
+        max-width: 760px;
+        height: auto;
+        margin: 0 auto;
+        border-radius: 9px;
+      }
+      .customer-proof-bottom {
+        margin-top: 24px;
+      }
+      .reviews {
+        background: #fff;
+        padding: 42px 0;
+      }
+      .reviews h2 {
+        text-align: center;
+        margin: 0 auto 8px;
+        font-size: 28px;
+        line-height: 1.2;
+      }
+      .reviews-intro {
+        max-width: 650px;
+        margin: 0 auto 24px;
+        text-align: center;
+        color: #555;
+        line-height: 1.5;
+      }
+      .review-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .review {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 17px;
+        background: #fff;
+        box-shadow: 0 2px 9px #0000000a;
+      }
+      .stars {
+        color: #e6a400;
+        letter-spacing: 2px;
+        font-size: 16px;
+      }
+      .review p {
+        color: #333;
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 9px 0 0;
+      }
+      .review strong {
+        display: block;
+        margin-top: 12px;
+        font-size: 13px;
+      }
+      .disclaimer {
+        background: #f7f7f7;
+        border-top: 1px solid #e5e5e5;
+        text-align: center;
+        color: #666;
+        font-size: 11px;
+        line-height: 1.5;
+        padding: 22px 16px;
+      }
+      @media (max-width: 768px) {
+        .container {
+          width: min(600px, calc(100% - 20px));
+        }
+        .pricing-container {
+          flex-direction: column;
+          align-items: center;
+          gap: 18px;
+        }
+        .card,
+        .card.featured {
+          width: 100%;
+          max-width: 420px;
+          flex-basis: auto;
+          transform: none;
+        }
+        .card:hover,
+        .card.featured:hover {
+          transform: translateY(-2px);
+        }
+        .card.featured {
+          order: 1;
+        }
+        .card:nth-child(2) {
+          order: 2;
+        }
+        .card:nth-child(3) {
+          order: 3;
+        }
+        .products {
+          padding: 28px 0 38px;
+          background: linear-gradient(172deg, #111 0 7%, #fff 7.1% 100%);
+        }
+        .card h3 {
+          font-size: 30px;
+        }
+        .supply {
+          font-size: 15px;
+        }
+        .card:not(.featured) .product-img,
+        .product-img {
+          width: 185px;
+          height: 185px;
+        }
+        .number {
+          font-size: 56px;
+        }
+        .review-grid {
+          grid-template-columns: 1fr;
+          max-width: 420px;
+        }
+        .customer-proof-grid {
+          grid-template-columns: 1fr;
+        }
+        .customer-proof {
+          width: 100%;
+          padding: 12px;
+          border-radius: 12px;
+        }
+        .customer-proof h3 {
+          font-size: 18px;
+        }
+        .customer-proof p {
+          font-size: 12px;
+        }
+        .customer-proof-grid img {
+          max-width: 100%;
+        }
+        .fb-comment {
+          grid-template-columns: 40px 1fr;
+          gap: 10px;
+          padding: 15px;
+        }
+        .fb-avatar {
+          width: 40px;
+          height: 40px;
+          flex-basis: 40px;
+        }
+        .fb-name {
+          align-items: flex-start;
+          flex-wrap: wrap;
+        }
+        .fb-verified {
+          font-size: 11px;
+        }
+        .fb-stars {
+          font-size: 16px;
+          margin-top: 10px;
+        }
+        .fb-text {
+          font-size: 14px;
+        }
+        .offer h2 {
+          font-size: 25px;
+        }
+        .hero-headline {
+          font-size: 32px;
+          margin-bottom: 28px;
+        }
+        .top-alert {
+          font-size: 14px;
+        }
+      }
+    </style>
+    <style>
+      /* Vigor Jelly offer cards — scoped overrides */
+      :root {
+        --vigor-navy: #06374d;
+        --vigor-teal: #08637a;
+        --vigor-orange: #f59b23;
+        --vigor-yellow: #ffd300;
+        --vigor-cream: #fff7e8;
+        --vigor-green: #12a953;
+        --vigor-red: #ef4a3f;
+      }
+      .offer {
+        background: linear-gradient(135deg, var(--vigor-navy), var(--vigor-teal));
+      }
+      .offer p {
+        color: var(--vigor-yellow);
+      }
+      .products {
+        background: linear-gradient(168deg, var(--vigor-navy) 0 12%, #fff 12.1% 100%);
+      }
+      .card {
+        border-color: #a9abad;
+        color: var(--vigor-navy);
+      }
+      .card.featured {
+        border-color: var(--vigor-yellow);
+        background: var(--vigor-cream);
+        color: var(--vigor-navy);
+      }
+      .card-label {
+        color: var(--vigor-navy);
+        background: linear-gradient(90deg, #a9aaac, #f3f3f3 48%, #a9aaac);
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      .card.featured .card-label {
+        color: var(--vigor-navy);
+        background: linear-gradient(90deg, #f3a21f, #ffd170 50%, #f3a21f);
+        border-bottom-color: var(--vigor-yellow);
+      }
+      .card h3,
+      .supply,
+      .card.featured .supply,
+      .unit-price,
+      .card.featured .unit-price {
+        color: var(--vigor-navy);
+      }
+      .product-media {
+        position: relative;
+        width: 100%;
+        height: 235px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 4px auto 5px;
+      }
+      .product-media .product-img,
+      .card:not(.featured) .product-media .product-img {
+        width: auto;
+        height: auto;
+        max-width: 96%;
+        max-height: 225px;
+        margin: 0 auto;
+        object-fit: contain;
+      }
+      .card:not(.featured) .product-media {
+        height: 220px;
+      }
+      .card:not(.featured) .product-media .product-img {
+        max-height: 210px;
+      }
+      .save-badge {
+        position: absolute;
+        right: 3%;
+        top: 20%;
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        display: grid;
+        place-content: center;
+        color: #fff;
+        background: #c90f2b;
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1.02;
+        text-align: center;
+        border: 2px solid #fff;
+        box-shadow: 0 3px 8px #0003;
+      }
+      .save-badge small {
+        font-size: 9px;
+      }
+      .unit-price {
+        align-items: baseline;
+        margin: 4px 0 12px;
+      }
+      .unit-price .currency {
+        align-self: baseline;
+        margin: 0 3px 0 0;
+        font-size: 52px;
+      }
+      .unit-price .number {
+        font-size: 64px;
+      }
+      .unit-price .per-unit {
+        align-self: baseline;
+        margin: 0 0 0 3px;
+        font-size: 17px;
+        text-transform: none;
+      }
+      .benefits {
+        min-height: 108px;
+        justify-content: center;
+        gap: 2px;
+      }
+      .benefit,
+      .card.featured .benefit,
+      .card.featured .benefit.green {
+        position: relative;
+        color: var(--vigor-navy);
+        border-top: 0;
+        text-align: left;
+        padding: 5px 8px 5px 38px;
+        font-size: 12px;
+      }
+      .benefit::before {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 900;
+      }
+      .benefit.unavailable::before {
+        content: "×";
+        background: var(--vigor-red);
+      }
+      .benefit.available::before {
+        content: "✓";
+        background: var(--vigor-green);
+      }
+      .benefit.highlighted::before {
+        content: "✓";
+        background: var(--vigor-yellow);
+        color: #fff;
+      }
+      .buy,
+      .card.featured .buy {
+        width: 96%;
+        color: #071a50;
+        background: linear-gradient(#fff938, #ffd000);
+        box-shadow: 0 5px 0 #e5ae00;
+        border: 2px solid #ffcf00;
+        text-transform: uppercase;
+      }
+      .payment {
+        width: 145px;
+        height: 30px;
+      }
+      .card-total {
+        margin-top: 9px;
+        color: var(--vigor-navy);
+        font-size: 14px;
+      }
+      .card-total s {
+        text-decoration-color: #d92a32;
+        text-decoration-thickness: 2px;
+      }
+      @media (max-width: 768px) {
+        .products {
+          background: linear-gradient(172deg, var(--vigor-navy) 0 7%, #fff 7.1% 100%);
+        }
+        .product-media,
+        .card:not(.featured) .product-media {
+          height: 210px;
+        }
+        .product-media .product-img,
+        .card:not(.featured) .product-media .product-img {
+          max-height: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- EDIT TOP ALERT HERE: change only the text inside this bar -->
+    <div class="top-alert">
+      Attention: this presentation is available only today
+    </div>
+
+    <div class="marquee">
+      <span
+        >Daily updates for your well-being · Daily updates
+        for your well-being · Daily updates for your well-being
+        · Daily updates for your well-being ·</span
+      >
+    </div>
+
+    <section class="video-section">
+      <div class="container">
+        <!-- EDIT HEADLINE HERE: change only the text inside this h1 -->
+        <h1 id="main-headline" class="hero-headline">
+          <span class="accent">THE SIMPLE 7-SECOND TRICK TO MAKE YOUR BEST FRIEND FIRM
+        </h1>
+        <vturb-smartplayer id="vid-6a96e107d051ffdfde4f3a3d" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 178.21782178217822% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer> <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/78dde86a-ee07-427a-942f-58e3149a044c/players/6a96e107d051ffdfde4f3a3d/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
+        
+      </div>
+    </section>
+
+    <!-- EDIT PITCH TIME HERE: value in seconds; 3403 = 56:43 -->
+    <main
+      id="pitch-content"
+      class="esconder"
+      data-pitch-seconds="3403"
+      style="display: none"
+    >
+      <section class="offer" id="offer">
+        <div class="container">
+          <!-- EDIT OFFER HEADLINE HERE -->
+          <p>Get Vigor Jelly at the best available price</p>
+          <!-- EDIT OFFER SUBHEAD HERE -->
+          <h2>Choose your package</h2>
+          <div class="timer" id="timer">10:00</div>
+        </div>
+      </section>
+
+      <section class="products">
+        <div class="container">
+          <div class="pricing-container">
+            <a
+              class="card"
+              href="https://lp.massimus.shop/click/1"
+              aria-label="Buy 2 bottles of Vigor Jelly"
+            >
+              <div class="card-inner">
+                <div class="card-label">Basic</div>
+                <h3>2 bottles</h3>
+                <div class="supply">60 Day Supply</div>
+                <div class="product-media">
+                  <img
+                    class="product-img"
+                    src="images/vigor-jelly-2-bottles.png"
+                    alt="2 bottles of Vigor Jelly"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="unit-price">
+                  <span class="currency">$</span><span class="number">79</span><span class="per-unit">/Bottle</span>
+                </div>
+                <div class="benefits">
+                  <div class="benefit unavailable">FREE BONUSES!</div>
+                  <div class="benefit unavailable">FAST SHIPPING</div>
+                  <div class="benefit unavailable">FREE SHIPPING</div>
+                </div>
+                <span class="buy">Buy now</span>
+                <img
+                  class="payment"
+                  src="images/cxexyF0026619.webp"
+                  alt="Payment methods"
+                  loading="lazy"
+                />
+                <div class="card-total">TOTAL: <s>$358</s> $158</div>
+              </div>
+            </a>
+
+            <a
+              class="card featured"
+              href="https://lp.massimus.shop/click/3"
+              aria-label="Buy 6 bottles of Vigor Jelly"
+            >
+              <div class="card-inner">
+                <div class="card-label">Most Popular</div>
+                <h3>6 bottles</h3>
+                <div class="supply">180 Day Supply</div>
+                <div class="product-media">
+                  <img
+                    class="product-img"
+                    src="images/vigor-jelly-6-bottles.png"
+                    alt="6 bottles of Vigor Jelly"
+                    fetchpriority="high"
+                  />
+                  <span class="save-badge">SAVE<br>$780<br><small>TODAY</small></span>
+                </div>
+                <div class="unit-price">
+                  <span class="currency">$</span><span class="number">49</span><span class="per-unit">/Bottle</span>
+                </div>
+                <div class="benefits">
+                  <div class="benefit available">2 FREE BONUSES!</div>
+                  <div class="benefit available">FAST &amp; FREE SHIPPING</div>
+                  <div class="benefit available">60 DAYS GUARANTEE</div>
+                </div>
+                <span class="buy">Buy now</span>
+                <img
+                  class="payment"
+                  src="images/nqkNHJ5101409.webp"
+                  alt="Payment methods"
+                  loading="lazy"
+                />
+                <div class="card-total">TOTAL: <s>$1074</s> $294</div>
+              </div>
+            </a>
+
+            <a
+              class="card"
+              href="https://lp.massimus.shop/click/2"
+              aria-label="Buy 3 bottles of Vigor Jelly"
+            >
+              <div class="card-inner">
+                <div class="card-label">Standard</div>
+                <h3>3 bottles</h3>
+                <div class="supply">90 Day Supply</div>
+                <div class="product-media">
+                  <img
+                    class="product-img"
+                    src="images/vigor-jelly-3-bottles.png"
+                    alt="3 bottles of Vigor Jelly"
+                    loading="lazy"
+                  />
+                  <span class="save-badge">SAVE<br>$330<br><small>TODAY</small></span>
+                </div>
+                <div class="unit-price">
+                  <span class="currency">$</span><span class="number">69</span><span class="per-unit">/Bottle</span>
+                </div>
+                <div class="benefits">
+                  <div class="benefit unavailable">FREE BONUSES!</div>
+                  <div class="benefit highlighted">FAST &amp; FREE SHIPPING</div>
+                  <div class="benefit available">60 DAYS GUARANTEE</div>
+                </div>
+                <span class="buy">Buy now</span>
+                <img
+                  class="payment"
+                  src="images/cxexyF0026619.webp"
+                  alt="Payment methods"
+                  loading="lazy"
+                />
+                <div class="card-total">TOTAL: <s>$537</s> $207</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      
+
+    <script src="https://unpkg.com/@beworke/pixel@latest/dist/browser/pixel.hwaffiliate-landing.global.js"></script> 
+
+    <script type="text/javascript" src="https://lp.massimus.shop/track.js?rtkcmpid=6a96e13ba6971dcb1782d845"></script>
+
+    <script src="js/pitch.js" defer></script>
+    <script src="js/track_1.js" defer></script>
+    <script src="js/track.js" defer></script>
+    <script src="js/pixel.js" defer></script>
+    
+
+    <script>
+       (function() {
+         document.addEventListener("DOMContentLoaded", function() {
+           const urlParams = new URLSearchParams(window.location.search);
+           if (Array.from(urlParams).length === 0) return;
+           document.querySelectorAll("a").forEach(link => {
+             try {
+               const href = link.getAttribute("href");
+
+                if (
+                  !href ||
+                  href.startsWith("#") ||
+                  href.startsWith("javascript:")
+                ) return;
+
+               const linkUrl = new URL(href, window.location.origin);
+
+               urlParams.forEach((value, key) => {
+                 if (!linkUrl.searchParams.has(key)) {
+                   linkUrl.searchParams.set(key, value);
+                 }
+               });
+               link.setAttribute("href", linkUrl.toString());
+             } catch (e) {
+             }
+           });
+         });
+       })();
+    </script>
+  </body>
+</html>
