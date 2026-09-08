@@ -1,1 +1,267 @@
-
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zdraví Dnes | Neurochirurg odhalil skutečnou příčinu Alzheimerovy choroby</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.7;
+            font-size: 17px;
+        }
+        .advertorial-bar {
+            background-color: #2c3e50;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 780px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d32f2f;
+            font-size: 1.95em;
+            text-align: center;
+            margin-bottom: 12px;
+            line-height: 1.25;
+        }
+        .deck {
+            font-size: 1.05em;
+            color: #444;
+            border-left: 4px solid #d32f2f;
+            padding-left: 14px;
+            margin: 12px 0 20px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .author-box {
+            background-color: #f9f9f9;
+            padding: 13px 15px;
+            border-left: 4px solid #2c3e50;
+            margin-bottom: 22px;
+            font-size: 0.88em;
+            color: #555;
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-top: 28px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+        p { margin-bottom: 16px; }
+        .image-link {
+            display: block;
+            text-align: center;
+            margin: 22px 0;
+            transition: transform 0.2s ease;
+        }
+        .image-link:hover { transform: scale(1.02); }
+        .hero-image {
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        .pull-quote {
+            border-top: 2px solid #1a1a1a;
+            border-bottom: 2px solid #1a1a1a;
+            margin: 26px 0;
+            padding: 16px 20px;
+            font-size: 1.15em;
+            font-style: italic;
+            color: #1a1a1a;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .danger-box {
+            background-color: #fff5f5;
+            border: 1px solid #ffcccc;
+            border-left: 5px solid #d32f2f;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 1em;
+            line-height: 1.65;
+        }
+        .danger-box strong { color: #d32f2f; }
+        .highlight-box {
+            background-color: #fffbea;
+            border: 1px solid #e8c900;
+            border-left: 5px solid #FFD700;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 1em;
+            line-height: 1.65;
+        }
+        .highlight-box strong { color: #7a5c00; }
+        .cta-button {
+            display: block;
+            width: 90%;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px 20px;
+            background: linear-gradient(to bottom, #FFD700, #FFA500);
+            color: #000;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: 900;
+            border-radius: 8px;
+            text-align: center;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border: 2px solid #e69500;
+            animation: pulse 2s infinite;
+            line-height: 1.3;
+        }
+        .cta-button:hover {
+            background: linear-gradient(to bottom, #FFA500, #FF8C00);
+            transform: translateY(-2px);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .cta-sub {
+            text-align: center;
+            font-size: 0.82em;
+            color: #888;
+            margin-top: 8px;
+        }
+        .footer {
+            background-color: #222;
+            color: #aaa;
+            text-align: center;
+            padding: 36px 20px;
+            font-size: 0.82em;
+            margin-top: 40px;
+        }
+        .footer-content { max-width: 780px; margin: 0 auto; }
+        .disclaimer-box {
+            border: 1px solid #444;
+            padding: 14px;
+            margin-bottom: 18px;
+            text-align: justify;
+            font-size: 0.8em;
+            line-height: 1.4;
+            background-color: #1a1a1a;
+        }
+        .footer a { color: #ddd; text-decoration: none; margin: 0 10px; }
+        .footer a:hover { text-decoration: underline; color: #fff; }
+        .company-info { margin-top: 18px; font-weight: bold; color: #ccc; }
+        @media (max-width: 600px) {
+            .container { margin: 0; padding: 16px; border-radius: 0; }
+            h1 { font-size: 1.55em; }
+            .cta-button { font-size: 1.1em; width: 100%; }
+        }
+    </style>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+</head>
+<body>
+<div class="advertorial-bar">
+    ADVERTORIÁL | SPONZOROVANÝ OBSAH
+</div>
+<div class="container">
+    <h1>Neurochirurg: Bojíte se Alzheimerovy choroby? (Udělejte tohle před spaním)</h1>
+    <div class="deck">
+        Šokující objev se šíří po celé České republice. Světově uznávaný neurochirurg — který držel v rukou mozky tisíců lidí — odhalil to, co farmaceutický průmysl desítky let skrýval. A to, co uvidíte ve videu, navždy změní váš pohled na ztrátu paměti.
+    </div>
+    <div class="author-box">
+        <strong>Zveřejněno:</strong> Dnes &nbsp;|&nbsp; <strong>Redakce Zdraví Dnes</strong> &nbsp;|&nbsp; Doba čtení: 2 minuty
+    </div>
+    <a href="https://lp.callmeneira.shop/preclick" class="image-link">
+        <img src="./img/hero3.webp" alt="Skutečná příčina Alzheimerovy choroby" class="hero-image">
+    </a>
+    <p>Každé ráno se probudíte a první myšlenka je: co jsem dnes zapomněl? Jména, která vám nejdou na jazyk. Slova, která mizí uprostřed věty. Klíče, které jsou vždycky někde jinde. A ten tichý, dusivý strach — ne ze smrti, ale z toho dne, kdy už nepoznáte vlastní děti.</p>
+    <p>Roky vám říkají, že to je přirozená součást stárnutí. Že to musíte přijmout. Že se s tím nedá nic dělat. <strong>Ale co když se všichni mýlili — včetně vašeho lékaře?</strong></p>
+    <div class="danger-box">
+        <strong>⚠ Co vám lékař nikdy neřekl:</strong> Světově uznávaný neurochirurg — který desítky let studoval lidský mozek a operoval mozky tisíců lidí — objevil něco, co otřáslo lékařskou komunitou. Skutečná příčina kognitivního úpadku a Alzheimerovy choroby je úplně jiná, než jste si mysleli. Není to stárnutí. Není to genetika. Je to jednoduchý deficit — který můžete doplnit každý večer před spaním.
+    </div>
+    <h2>Objev, který se snažili smazat</h2>
+    <p>Když tento neurochirurg sdílel svůj objev s veřejností, reakce byla okamžitá. Jeho videa byla odstraňována. Účty mazány. Kontaktovali ho právníci. Velké farmaceutické společnosti udělaly všechno pro to, aby se tato informace nerozšířila.</p>
+    <p>Proč taková panika? Protože kdyby lidé znali pravdu, nikdo by nekupoval ty drahé léky, které léčí jen příznaky — nikdy ne příčinu. Přírodní řešení, které nelze patentovat, by farmaceutickému průmyslu vzalo miliardy.</p>
+    <div class="pull-quote">
+        „Třicet let jsem držel v rukou lidské mozky. Viděl jsem, co je ničí — a co je zachraňuje. Pravdu už nelze vzít zpět.“
+    </div>
+    <a href="https://lp.callmeneira.shop/preclick" class="image-link">
+        <img src="./img/img3.webp" alt="Přírodní řešení" class="hero-image">
+    </a>
+    <a href="https://lp.callmeneira.shop/preclick" class="cta-button">
+        ▶ PODÍVEJTE SE NA VIDEO TEĎ
+    </a>
+    <p class="cta-sub">Bezplatný přístup · Dostupné po omezenou dobu</p>
+    <h2>Co přesně video obsahuje?</h2>
+    <p>Než ho definitivně umlčeli, neurochirurg natočil podrobné video. V něm vysvětluje skutečnou příčinu kognitivního úpadku — která je šokující jiná, než jste si mysleli — a ten jednoduchý večerní rituál, který musíte dělat každý den, aby si mozek zachoval plnou kapacitu. Přírodní složku, kterou se používá po staletí na místě, kde je Alzheimerova choroba téměř neznámým pojmem.</p>
+    <div class="highlight-box">
+        <strong>Co ve videu najdete?</strong> Úplné vysvětlení skutečné příčiny kognitivního úpadku. Přírodní řešení, které se farmaceutické firmy snažily pohřbít. A ten jednoduchý rituál před spaním, který můžete udělat už dnes večer — doma, bez receptu, bez lékařského zásahu.
+    </div>
+    <div class="danger-box">
+        <strong>⚠ Varování:</strong> Video obsahuje informace, které farmaceutický průmysl nechce, abyste viděli. Už několikrát se ho snažili odstranit. Pokud jste tady teď — podívejte se okamžitě. Neoďládejte to na zítra.
+    </div>
+    <a href="https://lp.callmeneira.shop/preclick" class="cta-button">
+        ▶ PODÍVEJTE SE NA VIDEO TEĎ
+    </a>
+    <p class="cta-sub">Bezplatný přístup · Dostupné po omezenou dobu</p>
+</div>
+<div class="footer">
+    <div class="footer-content">
+        <div class="disclaimer-box">
+            <strong>DŮLEŽITÉ UPOZORNĚNÍ:</strong> Tyto webové stránky nejsou součástí webu Facebook ani společnosti Facebook Inc. Tyto stránky nejsou žádným způsobem podporovány společností Facebook. Tyto stránky a jejich obsah slouží výhradně k informačním a vzdělávacím účelům. Informace zde uvedené nelze považovat za lékařskou radu. Výsledky se mohou lišit a nejsou zaručeny. <strong>Příběh a osoby uvedené v článku slouží pouze pro ilustrativní účely.</strong> Před zahájením jakéhokoli nového zdravotního programu se vždy poraďte se svým lékařem.
+        </div>
+        <p>
+            <a href="./privacy.html">Zásady ochrany osobních údajů</a> |
+            <a href="./terms.html">Podmínky použití</a> |
+            <a href="mailto:contato@hyperelitedigital.com.br">Kontakt</a>
+        </p>
+        <div class="company-info">
+            FONTS NEXUS LTDA <br>
+            CNPJ: 67.232.158/0001-68<br>
+            Brasil
+        </div>
+        <p style="margin-top: 18px;">&copy; 2025 Zdraví Dnes. Všechna práva vyhrazena.</p>
+    </div>
+</div>
+<script>
+/* === BACKREDIRECT (desktop) ===
+   Pushes a dummy history entry, then listens for the back/forward
+   navigation (popstate). When triggered, sends the user to the
+   redirect URL below instead of letting them leave.
+   Swap BACKREDIRECT_URL if you want a different destination than
+   the main click URL (e.g. a dedicated backoffer / different geo). */
+(function () {
+    var BACKREDIRECT_URL = "https://lp.callmeneira.shop/preclick";
+    var fired = false;
+    history.pushState({ br: true }, "", location.href);
+    window.addEventListener("popstate", function () {
+        if (fired) return;
+        fired = true;
+        window.location.href = BACKREDIRECT_URL;
+    });
+})();
+</script>
+<script type="text/javascript" src="https://lp.callmeneira.shop/pretrack.js?rtkcmpid=6a8345cc3cbf06be9f509d86"></script>
+</body>
+</html>
