@@ -1,1 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direito Certo — Mockup do Funil</title>
+<style>
+  :root{
+    --bg:#f4f1ec; --ink:#1d2330; --muted:#6b7280; --line:#e3ddd3;
+    --brand:#0f5c5a; --brand-2:#e2704f; --card:#ffffff; --ok:#1f8a5b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+  .demo-bar{background:var(--ink);color:#fff;text-align:center;font-size:13px;padding:8px 16px}
+  header{max-width:1100px;margin:0 auto;padding:28px 16px 8px}
+  header h1{font-size:26px}
+  header p{color:var(--muted);margin-top:4px}
+  main{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:380px 1fr;gap:32px;align-items:start}
+  @media(max-width:860px){main{grid-template-columns:1fr}.phone-wrap{justify-self:center}}
+
+  /* Phone */
+  .phone-wrap{position:sticky;top:16px}
+  .phone{width:360px;max-width:100%;height:720px;background:#111;border-radius:40px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+  .screen{background:#fff;border-radius:30px;height:100%;overflow-y:auto;position:relative}
+  .scr{display:none;padding:22px 18px 28px;min-height:100%}
+  .scr.active{display:block}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--brand-2);margin-bottom:10px}
+  .btn{display:block;width:100%;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;background:var(--brand);color:#fff;margin-top:14px}
+  .btn.alt{background:var(--brand-2)}
+  .btn.ghost{background:transparent;color:var(--muted);font-weight:500;font-size:14px}
+  .small{font-size:12px;color:var(--muted)}
+
+  /* Ad */
+  .ad{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .ad-img{height:170px;background:linear-gradient(135deg,var(--brand),#2a8a86);display:flex;align-items:center;justify-content:center;color:#fff;font-size:44px}
+  .ad-body{padding:14px}
+  .ad-body h3{font-size:18px;line-height:1.3}
+  .sponsored{font-size:11px;color:var(--muted);margin-top:8px}
+
+  /* VSL */
+  .video{height:200px;border-radius:14px;background:#1d2330;display:flex;align-items:center;justify-content:center;position:relative}
+  .play{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--ink)}
+  .video span{position:absolute;bottom:10px;right:12px;color:#fff;font-size:12px}
+  .script{margin-top:14px;padding-left:18px;font-size:14px}
+  .script li{margin-bottom:6px}
+
+  /* Quiz */
+  .progress{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:18px}
+  .progress div{height:100%;background:var(--brand-2);width:0;transition:width .3s}
+  .q{font-size:20px;font-weight:700;margin-bottom:16px}
+  .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:14px;font-size:15px;margin-bottom:10px;cursor:pointer}
+  .opt:hover{border-color:var(--brand)}
+  select.opt{appearance:auto}
+
+  /* Loading */
+  .loading{text-align:center;padding-top:60px}
+  .spinner{width:56px;height:56px;border:5px solid var(--line);border-top-color:var(--brand);border-radius:50%;margin:0 auto 20px;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:18px 0}
+  .bar div{height:100%;background:var(--brand);width:0}
+  .proof{background:var(--bg);border-radius:12px;padding:12px;font-size:13px;margin-top:18px;text-align:left}
+
+  /* Reveal */
+  .result{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start}
+  .result b{display:block}
+  .check{color:var(--ok);font-weight:900}
+
+  /* Paywall */
+  .offer{border:2px solid var(--brand);border-radius:14px;padding:16px}
+  .offer ul{padding-left:18px;margin:10px 0;font-size:14px}
+  .price{font-size:30px;font-weight:800;color:var(--brand)}
+  .bump{border:2px dashed var(--brand-2);border-radius:12px;padding:12px;margin-top:14px;font-size:14px;display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+  .total{margin-top:12px;font-weight:700}
+
+  /* Side panel */
+  .panel h2{font-size:18px;margin:4px 0 12px}
+  .steps{list-style:none;display:grid;gap:8px;margin-bottom:28px}
+  .steps li{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:.15s}
+  .steps li.on{border-color:var(--brand);box-shadow:0 0 0 3px rgba(15,92,90,.12)}
+  .steps li b{display:block;font-size:15px}
+  .steps li span{font-size:13px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:28px}
+  .box{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px}
+  .box b{display:block;margin-bottom:4px}
+  .box p{font-size:14px;color:var(--muted)}
+  .pill{display:inline-block;background:var(--bg);border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700;color:var(--brand);margin-top:6px}
+  footer{max-width:1100px;margin:0 auto;padding:24px 16px 40px;font-size:13px;color:var(--muted)}
+  footer .disc{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px}
+</style>
+</head>
+<body>
+
+<div class="demo-bar">MOCKUP DE DEMONSTRAÇÃO — dados, regras e pagamentos fictícios</div>
+
+<header>
+  <h1>Funil "Direito Certo"</h1>
+  <p>Clique no celular para navegar pelo funil, ou escolha uma etapa ao lado.</p>
+</header>
+
+<main>
+  <!-- PHONE -->
+  <div class="phone-wrap">
+    <div class="phone"><div class="screen" id="screen">
+
+      <!-- 1 AD -->
+      <section class="scr active" data-step="0">
+        <span class="tag">1 · Anúncio native</span>
+        <div class="ad">
+          <div class="ad-img">📋</div>
+          <div class="ad-body">
+            <h3>Milhões de brasileiros deixam de receber benefícios por não saber que têm direito</h3>
+            <p class="small" style="margin-top:6px">Descubra em 2 minutos quais programas podem se aplicar a você.</p>
+            <div class="sponsored">Patrocinado · Direito Certo</div>
+          </div>
+        </div>
+        <button class="btn" onclick="go(1)">Saiba mais</button>
+      </section>
+
+      <!-- 2 VSL -->
+      <section class="scr" data-step="1">
+        <span class="tag">2 · VSL curta (60–90s)</span>
+        <div class="video"><div class="play">▶</div><span>1:24</span></div>
+        <ul class="script">
+          <li>Existem mais de 40 programas federais</li>
+          <li>A maioria das pessoas não sabe em quais se encaixa</li>
+          <li>"Vou te mostrar como descobrir o seu em 2 minutos"</li>
+        </ul>
+        <p class="small" style="margin-top:8px">Apresentador(a): a definir</p>
+        <button class="btn alt" onclick="go(2)">Descobrir meus benefícios</button>
+      </section>
+
+      <!-- 3 QUIZ -->
+      <section class="scr" data-step="2">
+        <span class="tag">3 · Quiz</span>
+        <div class="progress"><div id="qbar"></div></div>
+        <div id="quiz"></div>
+      </section>
+
+      <!-- 4 LOADING -->
+      <section class="scr" data-step="3">
+        <span class="tag">4 · Processando</span>
+        <div class="loading">
+          <div class="spinner"></div>
+          <b>Cruzando suas respostas com os programas disponíveis…</b>
+          <div class="bar"><div id="lbar"></div></div>
+          <div class="proof">⭐ "Descobri que tinha direito à Tarifa Social e nem sabia." — depoimento fictício</div>
+          <div class="proof">👥 +[X] pessoas já fizeram a consulta</div>
+        </div>
+      </section>
+
+      <!-- 5 REVEAL -->
+      <section class="scr" data-step="4">
+        <span class="tag">5 · Resultado parcial</span>
+        <h3 style="margin-bottom:6px">Você pode ter direito a:</h3>
+        <p class="small" style="margin-bottom:14px">Com base nas suas respostas (regras de elegibilidade ilustrativas).</p>
+        <div id="results"></div>
+        <button class="btn" onclick="go(5)">Ver como solicitar cada um</button>
+      </section>
+
+      <!-- 6 PAYWALL + 7 BUMP -->
+      <section class="scr" data-step="5">
+        <span class="tag">6 · Oferta + 7 · Order bump</span>
+        <div class="offer">
+          <b>Guia Personalizado Direito Certo</b>
+          <ul>
+            <li>Checklist de documentos para cada programa</li>
+            <li>Passo a passo de como solicitar</li>
+            <li>Onde ir: CRAS, gov.br, Caixa</li>
+          </ul>
+          <div class="price">R$ 37</div>
+        </div>
+        <label class="bump">
+          <input type="checkbox" id="bump" onchange="updTotal()">
+          <span><b>+ R$ 17 · Requerimentos prontos</b><br>Modelos em PDF editável para levar no atendimento.</span>
+        </label>
+        <div class="total" id="total">Total: R$ 37</div>
+        <button class="btn alt" onclick="go(6)">Comprar (demo)</button>
+        <p class="small" style="margin-top:10px">Os benefícios são gratuitos e solicitados nos canais oficiais. O guia vende organização e passo a passo.</p>
+      </section>
+
+      <!-- 8 UPSELL -->
+      <section class="scr" data-step="6">
+        <span class="tag">8 · Upsells pós-compra</span>
+        <h3 style="margin-bottom:12px">Compra confirmada ✅</h3>
+        <div class="offer" style="margin-bottom:12px">
+          <b>Monitoramento via WhatsApp</b>
+          <p class="small">Alertas de novas cotas e de atualização do CadÚnico.</p>
+          <div class="price" style="font-size:22px">R$ 14,90/mês</div>
+          <button class="btn" onclick="go(7)">Quero o monitoramento</button>
+        </div>
+        <div class="offer">
+          <b>Atendimento assistido</b>
+          <p class="small">Orientação individual para organizar e acompanhar o processo. Sem acesso a senhas gov.br.</p>
+          <div class="price" style="font-size:22px">R$ 147</div>
+          <button class="btn alt" onclick="go(7)">Quero ajuda individual</button>
+        </div>
+        <button class="btn ghost" onclick="go(7)">Não, obrigado</button>
+      </section>
+
+      <!-- END -->
+      <section class="scr" data-step="7">
+        <span class="tag">Fim · Backend</span>
+        <div class="loading" style="padding-top:40px">
+          <div style="font-size:48px">📬</div>
+          <h3 style="margin:12px 0">Seu guia foi enviado!</h3>
+          <p class="small">Aqui entram: cross-sell por programa, comunidade paga de suporte e sequência de reativação para quem não comprou.</p>
+          <button class="btn" onclick="restart()">Recomeçar demo</button>
+        </div>
+      </section>
+
+    </div></div>
+  </div>
+
+  <!-- PANEL -->
+  <div class="panel">
+    <h2>Etapas do funil</h2>
+    <ul class="steps" id="steps">
+      <li data-go="0"><b>1. Anúncio native</b><span>Autoridade + curiosidade + número concreto</span></li>
+      <li data-go="1"><b>2. VSL curta</b><span>Formato "revelação", 60–90 segundos</span></li>
+      <li data-go="2"><b>3. Quiz</b><span>6 perguntas, uma por tela, efeito de progresso</span></li>
+      <li data-go="3"><b>4. Loading</b><span>Cruzamento de dados + prova social</span></li>
+      <li data-go="4"><b>5. Reveal parcial</b><span>Valor grátis antes do pagamento, sempre com pelo menos 1 match</span></li>
+      <li data-go="5"><b>6–7. Oferta + order bump</b><span>Guia R$37 + requerimentos R$17</span></li>
+      <li data-go="6"><b>8. Upsells</b><span>Monitoramento recorrente + atendimento assistido</span></li>
+      <li data-go="7"><b>Backend</b><span>Cross-sell, comunidade, reativação</span></li>
+    </ul>
+
+    <h2>Monetização</h2>
+    <div class="grid">
+      <div class="box"><b>Produto principal</b><p>Checklist + passo a passo personalizado</p><span class="pill">R$ 27–47</span></div>
+      <div class="box"><b>Order bump</b><p>Requerimentos pré-preenchidos em PDF editável</p><span class="pill">ticket baixo</span></div>
+      <div class="box"><b>Upsell 1 · Recorrência</b><p>Alertas via WhatsApp</p><span class="pill">R$ 9–19/mês</span></div>
+      <div class="box"><b>Upsell 2 · Serviço</b><p>Atendimento assistido, a maior margem</p><span class="pill">R$ 97–197</span></div>
+      <div class="box"><b>Cross-sell</b><p>Módulos por programa (ex.: recurso de BPC negado)</p></div>
+      <div class="box"><b>Backend</b><p>Comunidade paga + reativação de leads do quiz</p></div>
+    </div>
+
+    <h2>Variante X1 (WhatsApp)</h2>
+    <div class="box" style="margin-bottom:28px"><p>As mesmas perguntas do quiz feitas pelo bot na conversa. O resultado parcial é entregue no chat, e o link de pagamento vem em seguida.</p></div>
+  </div>
+</main>
+
+<footer>
+  <div class="disc">
+    <b>Aviso:</b> Direito Certo é uma marca fictícia de demonstração. Não é afiliada ao Governo Federal, Caixa, INSS ou qualquer órgão público. Os benefícios sociais são gratuitos e solicitados diretamente pelo CRAS, gov.br ou Caixa. As regras de elegibilidade deste mockup são ilustrativas e não representam critérios oficiais.
+  </div>
+</footer>
+
+<script>
+const questions = [
+  {k:"renda", q:"Qual a renda total da sua família por mês?", o:["Até R$ 1.500","R$ 1.500 a R$ 3.000","R$ 3.000 a R$ 5.000","R$ 5.000 a R$ 8.000","Acima de R$ 8.000"]},
+  {k:"familia", q:"Quem mora com você?", o:["Moro sozinho(a)","Tenho filhos","Tenho idoso ou pessoa com deficiência em casa"]},
+  {k:"moradia", q:"Qual sua situação de moradia?", o:["Pago aluguel","Estou financiando","Casa própria quitada","Não tenho moradia fixa"]},
+  {k:"cad", q:"Você está inscrito(a) no CadÚnico?", o:["Sim","Não sei","Não"]},
+  {k:"idade", q:"Qual a sua idade?", o:["18 a 29","30 a 49","50 a 64","65 ou mais"]},
+  {k:"uf", q:"Em qual estado você mora?", select:["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"]}
+];
+let qi = 0, ans = {};
+
+function go(n){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('active', +s.dataset.step===n));
+  document.querySelectorAll('#steps li').forEach(l=>l.classList.toggle('on', +l.dataset.go===n));
+  document.getElementById('screen').scrollTop = 0;
+  if(n===2){ if(qi>=questions.length){qi=0;ans={};} renderQ(); }
+  if(n===3) runLoading();
+  if(n===4) renderResults();
+}
+function renderQ(){
+  const q = questions[qi];
+  document.getElementById('qbar').style.width = (qi/questions.length*100)+'%';
+  let h = `<p class="small" style="margin-bottom:6px">Pergunta ${qi+1} de ${questions.length}</p><div class="q">${q.q}</div>`;
+  if(q.select){
+    h += `<select class="opt" id="sel"><option value="">Selecione…</option>${q.select.map(u=>`<option>${u}</option>`).join('')}</select>
+          <button class="btn" onclick="pickSel()">Continuar</button>`;
+  } else {
+    h += q.o.map((o,i)=>`<button class="opt" onclick="pick(${i})">${o}</button>`).join('');
+  }
+  document.getElementById('quiz').innerHTML = h;
+}
+function pick(i){ ans[questions[qi].k]=i; next(); }
+function pickSel(){ const v=document.getElementById('sel').value; if(!v) return; ans.uf=v; next(); }
+function next(){ qi++; if(qi<questions.length) renderQ(); else { document.getElementById('qbar').style.width='100%'; go(3);} }
+
+function runLoading(){
+  const b = document.getElementById('lbar'); b.style.transition='none'; b.style.width='0';
+  requestAnimationFrame(()=>{ b.style.transition='width 2.8s linear'; b.style.width='100%'; });
+  setTimeout(()=>go(4), 3000);
+}
+function renderResults(){
+  // Lógica ILUSTRATIVA de demonstração — não são critérios oficiais
+  const r = ans.renda ?? 0, f = ans.familia ?? 0, m = ans.moradia ?? 0, id = ans.idade ?? 0;
+  const out = [];
+  if(r===0) out.push(["Bolsa Família","Transferência de renda para famílias de baixa renda"]);
+  if(r<=1) out.push(["Tarifa Social de Energia","Desconto na conta de luz"],["Auxílio Gás","Apoio para compra de gás de cozinha"],["Isenção de Taxa de Concurso","Inscrição gratuita em concursos públicos"]);
+  if((f===2 || id===3) && r<=1) out.push(["BPC","Benefício para idosos e pessoas com deficiência"]);
+  if(f===2 || id===3) out.push(["Passe Livre","Transporte gratuito em linhas interestaduais"]);
+  if((m===0 || m===3) && r<=3) out.push(["Minha Casa Minha Vida","Acesso facilitado à casa própria"]);
+  out.push(["Farmácia Popular","Medicamentos gratuitos ou com desconto"]);
+  document.getElementById('results').innerHTML = out.map(([t,d])=>
+    `<div class="result"><span class="check">✓</span><div><b>${t}</b><span class="small">${d}</span></div></div>`).join('');
+}
+function updTotal(){ document.getElementById('total').textContent = 'Total: R$ ' + (document.getElementById('bump').checked ? 54 : 37); }
+function restart(){ qi=0; ans={}; document.getElementById('bump').checked=false; updTotal(); go(0); }
+
+document.querySelectorAll('#steps li').forEach(l=>l.addEventListener('click',()=>{
+  const n = +l.dataset.go;
+  if(n===4 && Object.keys(ans).length===0){ ans={renda:0,familia:1,moradia:0,cad:1,idade:1,uf:"SP"}; }
+  if(n===3){ go(3); return; }
+  go(n);
+}));
+document.querySelector('#steps li').classList.add('on');
+</script>
+</body>
+</html>
 
