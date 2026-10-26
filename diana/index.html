@@ -1,1 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DianaMind | Ежедневный Swipe File</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #faf9fb; color: #18181b; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .purple-accent { color: #8b5cf6; }
+    .purple-bg { background-color: #8b5cf6; }
+    .purple-bg-light { background-color: #f5f3ff; }
+    .purple-border { border-color: #ede9fe; }
+  </style>
+</head>
+<body class="min-h-screen pb-16">
 
+  <!-- HEADER MINIMALISTA -->
+  <header class="border-b purple-border bg-white/80 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg purple-bg text-white font-black flex items-center justify-center text-sm shadow-sm">D</div>
+        <span class="font-extrabold tracking-tight text-base text-zinc-900">Diana<span class="purple-accent">Mind</span></span>
+        <span class="text-[11px] bg-purple-50 purple-accent px-2.5 py-0.5 rounded-full font-semibold border purple-border" id="badge-text">● Обновлено сегодня</span>
+      </div>
+
+      <!-- SELETOR DE IDIOMA RU / EN -->
+      <div class="flex items-center gap-1 bg-purple-50/50 p-1 rounded-xl border purple-border">
+        <button onclick="setLang('ru')" id="btn-ru" class="px-2.5 py-1 rounded-lg text-xs font-bold transition purple-bg text-white shadow-sm">🇷🇺 RU</button>
+        <button onclick="setLang('en')" id="btn-en" class="px-2.5 py-1 rounded-lg text-xs font-bold transition text-zinc-600 hover:text-purple-700">🇬🇧 EN</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-4xl mx-auto px-4 pt-8">
+
+    <!-- TÍTULO DA PLATAFORMA -->
+    <div class="mb-6 text-center sm:text-left">
+      <h1 id="main-title" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">Swipe File & Тренды недели</h1>
+      <p id="main-subtitle" class="text-sm text-zinc-500 mt-1">Выберите нишу вашего клиента и скопируйте то, что конвертирует прямо сейчас, в 1 клик.</p>
+    </div>
+
+    <!-- BARRA DE PESQUISA + FILTROS DE NICHO -->
+    <div class="space-y-4 mb-6">
+      <div class="relative">
+        <input 
+          type="text" 
+          id="search-input" 
+          oninput="renderContent()" 
+          placeholder="🔍 Поиск по нише (например: бьюти, стоматология)..." 
+          class="w-full bg-white border purple-border rounded-2xl pl-4 pr-4 py-3 text-sm text-zinc-950 placeholder-zinc-400 shadow-sm focus:outline-none focus:border-purple-400 transition"
+        />
+      </div>
+
+      <!-- PÍLULAS DE NICHO -->
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="niche-pills"></div>
+    </div>
+
+    <!-- ABAS PRINCIPAIS: ORGÂNICO VS TRÁFEGO PAGO -->
+    <div class="grid grid-cols-2 gap-2 p-1.5 bg-white border purple-border rounded-2xl shadow-sm mb-8">
+      <button onclick="switchTab('organic')" id="tab-organic" class="py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 purple-bg text-white shadow-sm">
+        <span>📱</span> <span id="lbl-tab-org">Органика (Reels & Stories)</span>
+      </button>
+      <button onclick="switchTab('paid')" id="tab-paid" class="py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-zinc-600 hover:bg-purple-50/50">
+        <span>🎯</span> <span id="lbl-tab-paid">Платный трафик (Meta & Google)</span>
+      </button>
+    </div>
+
+    <!-- CONTAINER DE CARDS -->
+    <div class="space-y-4" id="content-container"></div>
+
+  </main>
+
+  <script>
+    let currentLang = 'ru';
+    let currentTab = 'organic';
+    let selectedNiche = 'all';
+
+    const dict = {
+      ru: {
+        badge: "● Обновлено сегодня",
+        title: "Swipe File & Тренды недели",
+        subtitle: "Выберите нишу вашего клиента и скопируйте то, что конвертирует прямо сейчас, в 1 клик.",
+        searchPlaceholder: "🔍 Поиск по нише (например: бьюти, стоматология, недвижимость)...",
+        tabOrg: "📱 Органика (Reels & Stories)",
+        tabPaid: "🎯 Платный трафик (Meta & Google)",
+        copyOrg: "📋 Скопировать сценарий Reels в 1 клик",
+        copyPaid: "📋 Скопировать структуру трафика в 1 клик",
+        noResults: "Ничего не найдено по вашему запросу. Попробуйте другой ключевой запрос или нишу.",
+        alertOrg: "Органический сценарий успешно скопирован!",
+        alertPaid: "Структура платного трафика успешно скопирована!",
+        niches: [
+          { id: 'all', name: '🔥 Все ниши' },
+          { id: 'beauty', name: '💆‍♀️ Бьюти и косметология' },
+          { id: 'dental', name: '🦷 Стоматология' },
+          { id: 'resto', name: '🍝 Рестораны и гастро' },
+          { id: 'realty', name: '🏢 Недвижимость' }
+        ]
+      },
+      en: {
+        badge: "● Updated Today",
+        title: "Swipe File & Weekly Trends",
+        subtitle: "Select your client's niche and copy what's converting right now in 1 click.",
+        searchPlaceholder: "🔍 Search by niche (e.g., beauty, dental, real estate)...",
+        tabOrg: "📱 Organic (Reels & Stories)",
+        tabPaid: "🎯 Paid Traffic (Meta & Google)",
+        copyOrg: "📋 Copy Reels Script in 1 Click",
+        copyPaid: "📋 Copy Traffic Structure in 1 Click",
+        noResults: "No results found for your search. Try another keyword or niche.",
+        alertOrg: "Organic script copied successfully!",
+        alertPaid: "Paid traffic structure copied successfully!",
+        niches: [
+          { id: 'all', name: '🔥 All Niches' },
+          { id: 'beauty', name: '💆‍♀️ Beauty & Esthetics' },
+          { id: 'dental', name: '🦷 Dentistry' },
+          { id: 'resto', name: '🍝 Restaurants & Food' },
+          { id: 'realty', name: '🏢 Real Estate' }
+        ]
+      }
+    };
+
+    const data = [
+      {
+        id: 1,
+        niche: 'beauty',
+        nicheName: { ru: '💆‍♀️ Бьюти и косметология', en: '💆‍♀️ Beauty & Esthetics' },
+        title: { 
+          ru: 'Формат «Заскринь это»: 3 ошибки в уходе до 35 лет', 
+          en: '"Screenshot This" Format: 3 Skincare Mistakes Before 35' 
+        },
+        metric: { ru: '📈 +420% Сохранений на этой неделе', en: '📈 +420% Saves this week' },
+        organic: {
+          audio: { ru: 'Трендовый звук (#4 в Европе/СНГ) — спокойный ритм с резким битом на переходе.', en: 'Trending audio (#4 in Europe/CIS) - calm rhythm with a sharp beat on transition.' },
+          hook: { ru: 'Визуальный хук (0-3 сек): «3 процедуры, которые старят ваше лицо, если делать их не в том порядке (Заскринь это)».', en: 'Visual Hook (0-3s): "3 procedures that age your face if done in the wrong order (Screenshot this)".' },
+          script: { ru: 'Описание/Сценарий: Разобрать ошибку №1 (избыток филлеров), ошибку №2 (неправильный уход) и дать CTA: «Пиши слово КОЖА в комментарии для получения цифрового разбора».', en: 'Caption/Script: Break down mistake #1 (filler overload), mistake #2 (wrong skincare) and CTA: "Comment SKIN to get the digital breakdown in 5 seconds".' }
+        },
+        paid: {
+          meta: { ru: 'Meta Ads (Радиус 5 км): Видео 12 сек с демонстрацией аппарата + Оффер: Компьютерная диагностика лица + сертификат 30€ на первый визит.', en: 'Meta Ads (5km Radius): 12s video showing device + Offer: Facial diagnostics + €30 voucher on 1st visit.' },
+          google: { ru: 'Google Ads (Поиск): «косметолог рядом со мной», «контурная пластика цена [город]», «чистка лица записаться».', en: 'Google Ads (Search): "facial esthetics near me", "filler price [city]", "deep cleansing facial book".' }
+        }
+      },
+      {
+        id: 2,
+        niche: 'dental',
+        nicheName: { ru: '🦷 Стоматология', en: '🦷 Dentistry' },
+        title: { 
+          ru: '3D-сканер в действии: «Улыбка до начала лечения»', 
+          en: '3D Scanner in Action: "Your Smile Before Treatment Starts"' 
+        },
+        metric: { ru: '🔥 Высокая конверсия в запись', en: '🔥 High conversion to booking' },
+        organic: {
+          audio: { ru: 'ASMR клиники + расслабляющий фоновый эмбиент.', en: 'Clinic ASMR + relaxing background ambient.' },
+          hook: { ru: 'Визуальный хук (0-3 сек): Пациент видит свою будущую улыбку в 3D на экране до того, как потратит 1 евро.', en: 'Visual Hook (0-3s): Patient seeing their future smile in 3D on screen before spending a single euro.' },
+          script: { ru: 'Описание/Сценарий: «Почему в 2026 году больше никто не делает гипсовые слепки». Показать цифровое до/после и попросить написать «УЛЫБКА».', en: 'Caption/Script: "Why nobody uses messy dental putty molds anymore in 2026". Show digital before/after and ask to comment "SMILE".' }
+        },
+        paid: {
+          meta: { ru: 'Meta Ads: Карусель с реальными кейсами до/после + Видео врача с 3D-сканером и кнопкой перевода в WhatsApp.', en: 'Meta Ads: Carousel with real before/after cases + Video of doctor with 3D scanner and WhatsApp button.' },
+          google: { ru: 'Google Ads (Поиск): «имплантация зубов [город]», «элайнеры цена», «срочная стоматология [район]».', en: 'Google Ads (Search): "dental implants [city]", "clear aligners price", "emergency dentist [neighborhood]".' }
+        }
+      },
+      {
+        id: 3,
+        niche: 'resto',
+        nicheName: { ru: '🍝 Рестораны и гастро', en: '🍝 Restaurants & Food' },
+        title: { 
+          ru: '«Секретное место на улице [X], о котором не знают 90% города»', 
+          en: '"The secret spot on [X] street that 90% of the city doesn\'t know"' 
+        },
+        metric: { ru: '🚀 +510% Репостов в Stories', en: '🚀 +510% Story Shares' },
+        organic: {
+          audio: { ru: 'Реальный звук готовки (ASMR шкворчания) + мягкая инструментальная музыка.', en: 'Real cooking sound (sizzling ASMR) + soft instrumental music.' },
+          hook: { ru: 'Визуальный хук (0-3 сек): Макро-кадр нарезки фирменного блюда шеф-повара крупным планом.', en: 'Visual Hook (0-3s): Macro close-up shot of the chef cutting the signature dish.' },
+          script: { ru: 'Описание/Сценарий: Без голоса. Текст по центру: «Если ты живешь в [Город] и до сих пор не пробовал это блюдо, отправь тому, кто должен сводить тебя сюда на выходных».', en: 'Caption/Script: No voiceover. Centered text: "If you live in [City] and haven\'t tried this yet, send it to the person who owes you a dinner here this weekend".' }
+        },
+        paid: {
+          meta: { ru: 'Meta Ads: Таргет на «Именинников в ближайшие 7 дней» в радиусе 10 км с подарком в виде бутылки игристого при брони.', en: 'Meta Ads: Targeting "Birthdays in next 7 days" in 10km radius offering complimentary dessert or wine upon booking.' },
+          google: { ru: 'Google Ads (Карты/Поиск): «где поужинать сегодня [город]», «лучший итальянский ресторан [район]».', en: 'Google Ads (Maps/Search): "where to dine tonight [city]", "best Italian restaurant [neighborhood]".' }
+        }
+      },
+      {
+        id: 4,
+        niche: 'realty',
+        nicheName: { ru: '🏢 Недвижимость', en: '🏢 Real Estate' },
+        title: { 
+          ru: 'Что можно купить за 250.000€ в центре против района в 15 минутах', 
+          en: 'What €250,000 buys Downtown vs 15 minutes away' 
+        },
+        metric: { ru: '💬 Лидер по заявкам в Direct', en: '💬 Top lead generator in DMs' },
+        organic: {
+          audio: { ru: 'Динамичный бит с быстрой сменой кадров каждые 4 секунды.', en: 'Dynamic beat with fast scene cuts every 4 seconds.' },
+          hook: { ru: 'Визуальный хук (0-3 сек): Компактная студия в центре vs просторная терраса в тихом районе.', en: 'Visual Hook (0-3s): Compact studio downtown vs spacious terrace in a quiet neighborhood.' },
+          script: { ru: 'Описание/Сценарий: «Что бы выбрали вы для своей семьи?». CTA: Пишите слово «КАТАЛОГ», чтобы получить PDF с 5 скрытыми объектами.', en: 'Caption/Script: "Which would you choose for your family?". CTA: Comment "CATALOG" to receive the PDF with 5 hidden properties.' }
+        },
+        paid: {
+          meta: { ru: 'Meta Ads: Карусель объектов недвижимости со скидкой ниже рыночной оценки на этой неделе.', en: 'Meta Ads: Carousel of properties priced below market valuation this week.' },
+          google: { ru: 'Google Ads (Поиск): «купить квартиру 2 спальни [город]», «новостройки инвестиции [город]».', en: 'Google Ads (Search): "buy 2 bedroom apartment [city]", "new build investments [city]".' }
+        }
+      }
+    ];
+
+    function setLang(lang) {
+      currentLang = lang;
+      const d = dict[lang];
+
+      document.getElementById('btn-ru').className = lang === 'ru' ? 'px-2.5 py-1 rounded-lg text-xs font-bold transition purple-bg text-white shadow-sm' : 'px-2.5 py-1 rounded-lg text-xs font-bold transition text-zinc-600 hover:text-purple-700';
+      document.getElementById('btn-en').className = lang === 'en' ? 'px-2.5 py-1 rounded-lg text-xs font-bold transition purple-bg text-white shadow-sm' : 'px-2.5 py-1 rounded-lg text-xs font-bold transition text-zinc-600 hover:text-purple-700';
+
+      document.getElementById('badge-text').innerText = d.badge;
+      document.getElementById('main-title').innerText = d.title;
+      document.getElementById('main-subtitle').innerText = d.subtitle;
+      document.getElementById('search-input').placeholder = d.searchPlaceholder;
+      document.getElementById('lbl-tab-org').innerText = d.tabOrg;
+      document.getElementById('lbl-tab-paid').innerText = d.tabPaid;
+
+      renderNiches();
+      renderContent();
+    }
+
+    function renderNiches() {
+      const container = document.getElementById('niche-pills');
+      const nichesList = dict[currentLang].niches;
+      container.innerHTML = nichesList.map(n => {
+        const active = selectedNiche === n.id;
+        return `<button onclick="setNiche('${n.id}')" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition border ${active ? 'purple-bg text-white border-transparent shadow-sm' : 'bg-white text-zinc-600 purple-border hover:border-purple-300'}">
+          ${n.name}
+        </button>`;
+      }).join('');
+    }
+
+    function setNiche(id) {
+      selectedNiche = id;
+      renderNiches();
+      renderContent();
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      const tOrg = document.getElementById('tab-organic');
+      const tPaid = document.getElementById('tab-paid');
+
+      if (tab === 'organic') {
+        tOrg.className = "py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 purple-bg text-white shadow-sm";
+        tPaid.className = "py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-zinc-600 hover:bg-purple-50/50";
+      } else {
+        tPaid.className = "py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 purple-bg text-white shadow-sm";
+        tOrg.className = "py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-zinc-600 hover:bg-purple-50/50";
+      }
+      renderContent();
+    }
+
+    function renderContent() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const container = document.getElementById('content-container');
+      const d = dict[currentLang];
+
+      const filtered = data.filter(item => {
+        const matchesNiche = selectedNiche === 'all' || item.niche === selectedNiche;
+        const textToSearch = `${item.title[currentLang]} ${item.nicheName[currentLang]} ${item.organic.hook[currentLang]}`.toLowerCase();
+        return matchesNiche && textToSearch.includes(q);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="bg-white border purple-border rounded-2xl p-8 text-center text-zinc-400 text-sm">${d.noResults}</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const nicheText = item.nicheName[currentLang];
+        const titleText = item.title[currentLang];
+        const metricText = item.metric[currentLang];
+
+        if (currentTab === 'organic') {
+          const org = item.organic;
+          return `
+            <div class="bg-white border purple-border rounded-2xl p-6 shadow-sm hover:border-purple-300 transition space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold px-3 py-1 rounded-full purple-bg-light purple-accent border purple-border">${nicheText}</span>
+                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">${metricText}</span>
+              </div>
+              
+              <div>
+                <h3 class="font-extrabold text-lg text-zinc-900">${titleText}</h3>
+              </div>
+
+              <div class="space-y-2.5 text-xs bg-purple-50/40 border purple-border rounded-xl p-4">
+                <div><span class="font-bold text-purple-900">${currentLang === 'ru' ? '🎵 Аудио / Ритм:' : '🎵 Audio / Rhythm:'}</span> <span class="text-zinc-700">${org.audio[currentLang]}</span></div>
+                <div><span class="font-bold text-purple-900">${currentLang === 'ru' ? '🎬 Визуальный хук:' : '🎬 Visual Hook:'}</span> <span class="text-zinc-700">${org.hook[currentLang]}</span></div>
+                <div><span class="font-bold text-purple-900">${currentLang === 'ru' ? '📝 Сценарий / Описание:' : '📝 Script / Caption:'}</span> <span class="text-zinc-700">${org.script[currentLang]}</span></div>
+              </div>
+
+              <button onclick="navigator.clipboard.writeText(\`${titleText}\\n\\n${org.hook[currentLang]}\\n\\n${org.script[currentLang]}\`); alert('${d.alertOrg}')" class="w-full purple-bg-light hover:bg-purple-100 purple-accent font-bold py-2.5 rounded-xl text-xs transition border purple-border">
+                ${d.copyOrg}
+              </button>
+            </div>
+          `;
+        } else {
+          const paid = item.paid;
+          return `
+            <div class="bg-white border purple-border rounded-2xl p-6 shadow-sm hover:border-purple-300 transition space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold px-3 py-1 rounded-full purple-bg-light purple-accent border purple-border">${nicheText}</span>
+                <span class="text-xs font-semibold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full">${currentLang === 'ru' ? '🎯 Быстрые заявки' : '🎯 Fast Leads'}</span>
+              </div>
+              
+              <div>
+                <h3 class="font-extrabold text-lg text-zinc-900">${titleText}</h3>
+              </div>
+
+              <div class="space-y-2.5 text-xs bg-purple-50/40 border purple-border rounded-xl p-4">
+                <div><span class="font-bold text-purple-900">${currentLang === 'ru' ? '🎯 Meta Ads (Радиус):' : '🎯 Meta Ads (Radius):'}</span> <span class="text-zinc-700">${paid.meta[currentLang]}</span></div>
+                <div><span class="font-bold text-purple-900">${currentLang === 'ru' ? '🔍 Google Ads (Ключи):' : '🔍 Google Ads (Keywords):'}</span> <span class="text-zinc-700">${paid.google[currentLang]}</span></div>
+              </div>
+
+              <button onclick="navigator.clipboard.writeText(\`Meta Ads: ${paid.meta[currentLang]}\\n\\nGoogle Ads: ${paid.google[currentLang]}\`); alert('${d.alertPaid}')" class="w-full purple-bg-light hover:bg-purple-100 purple-accent font-bold py-2.5 rounded-xl text-xs transition border purple-border">
+                ${d.copyPaid}
+              </button>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    // Inicializar no idioma russo
+    setLang('ru');
+  </script>
+</body>
+</html>
