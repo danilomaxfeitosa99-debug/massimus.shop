@@ -1,133 +1,285 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="cs">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Krátký redakční pohled na nenápadné signály, kterých si muži často všimnou až později." />
-    <title>Tichý signál, kterého si muži často nevšimnou</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zdraví Dnes | Odhalena skutečná příčina erektilní dysfunkce</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.7;
+            font-size: 17px;
+        }
+        .advertorial-bar {
+            background-color: #2c3e50;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 780px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d32f2f;
+            font-size: 1.95em;
+            text-align: center;
+            margin-bottom: 12px;
+            line-height: 1.25;
+        }
+        .deck {
+            font-size: 1.05em;
+            color: #444;
+            border-left: 4px solid #d32f2f;
+            padding-left: 14px;
+            margin: 12px 0 20px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .author-box {
+            background-color: #f9f9f9;
+            padding: 13px 15px;
+            border-left: 4px solid #2c3e50;
+            margin-bottom: 22px;
+            font-size: 0.88em;
+            color: #555;
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-top: 28px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+        p { margin-bottom: 16px; }
+        .image-link {
+            display: block;
+            text-align: center;
+            margin: 22px 0;
+            transition: transform 0.2s ease;
+        }
+        .image-link:hover { transform: scale(1.02); }
+        .hero-image {
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        .pull-quote {
+            border-top: 2px solid #1a1a1a;
+            border-bottom: 2px solid #1a1a1a;
+            margin: 26px 0;
+            padding: 16px 20px;
+            font-size: 1.15em;
+            font-style: italic;
+            color: #1a1a1a;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .danger-box {
+            background-color: #fff5f5;
+            border: 1px solid #ffcccc;
+            border-left: 5px solid #d32f2f;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 1em;
+            line-height: 1.65;
+        }
+        .danger-box strong { color: #d32f2f; }
+        .highlight-box {
+            background-color: #fffbea;
+            border: 1px solid #e8c900;
+            border-left: 5px solid #FFD700;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 1em;
+            line-height: 1.65;
+        }
+        .highlight-box strong { color: #7a5c00; }
+        .cta-button {
+            display: block;
+            width: 90%;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px 20px;
+            background: linear-gradient(to bottom, #FFD700, #FFA500);
+            color: #000;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: 900;
+            border-radius: 8px;
+            text-align: center;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border: 2px solid #e69500;
+            animation: pulse 2s infinite;
+            line-height: 1.3;
+        }
+        .cta-button:hover {
+            background: linear-gradient(to bottom, #FFA500, #FF8C00);
+            transform: translateY(-2px);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .cta-sub {
+            text-align: center;
+            font-size: 0.82em;
+            color: #888;
+            margin-top: 8px;
+        }
+        .footer {
+            background-color: #222;
+            color: #aaa;
+            text-align: center;
+            padding: 36px 20px;
+            font-size: 0.82em;
+            margin-top: 40px;
+        }
+        .footer-content { max-width: 780px; margin: 0 auto; }
+        .disclaimer-box {
+            border: 1px solid #444;
+            padding: 14px;
+            margin-bottom: 18px;
+            text-align: justify;
+            font-size: 0.8em;
+            line-height: 1.4;
+            background-color: #1a1a1a;
+        }
+        .footer a { color: #ddd; text-decoration: none; margin: 0 10px; }
+        .footer a:hover { text-decoration: underline; color: #fff; }
+        .company-info { margin-top: 18px; font-weight: bold; color: #ccc; }
+        @media (max-width: 600px) {
+            .container { margin: 0; padding: 16px; border-radius: 0; }
+            h1 { font-size: 1.55em; }
+            .cta-button { font-size: 1.1em; width: 100%; }
+        }
+    </style>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+</head>
+<body>
+<img src="https://lp.massimus.shop/6aa008d6dcc7ba144eef6f24?sub1={campaign_id}&sub2={teaser_id}&sub3={widget_id}&sub4={category_id}&sub5={geo}&sub6={source}&sub7={source_id}&sub8={user_id}&sub9={geo_region}&sub10={referrer}&sub11={ifa}&sub12={gdpr}&sub13={gdpr_consent}&sub14={client_id}&sub15={title}&sub16={price_range}&ref_id={click_id}&cost={click_price}" width="1" height="1" style="display:none;" alt="" />
 
-  <body>
-    <div class="top-strip" aria-hidden="true"></div>
+<div class="advertorial-bar">
+    ADVERTORIÁL | SPONZOROVANÝ OBSAH
+</div>
 
-    <header class="site-header shell">
-      <a class="wordmark" href="index.html" aria-label="Každodenní signál domů">každodenní <span>signál</span></a>
-      <p class="header-note">REDAKČNÍ ČLÁNEK · KAŽDODENNÍ VITALITA MUŽŮ</p>
-    </header>
+<div class="container">
 
-    <main>
-      <section class="hero shell">
-        <div class="hero-copy">
-          <p class="kicker"><span class="kicker-line" aria-hidden="true"></span>JEDNOHO VEČERA</p>
+    <h1>Urologové v šoku: Muži nepotřebují modrou pilulku, pokud před sprchou udělají tento 15vteřinový trik (Odhalena vnitřní blokáda)</h1>
 
-          <h1>
-            Někteří muži si všimnou změny
-            <em>dříve, než ji dokážou pojmenovat.</em>
-          </h1>
+    <div class="deck">
+        Prodeje modrých pilulek v České republice prudce padají. Poté, co z vládních archivů unikl utajovaný vojenský recept a na veřejnost se dostalo šokující video z kuchyně, více než 9 000 českých a slovenských mužů znovu získalo erekci tvrdou jako skála za méně než 14 dní — bez léků a bez rizika pro srdce.
+    </div>
 
-          <p class="hero-text">
-            Není to vždy velká věc. Spíše malý okamžik, kdy se běžná jistota zdá být trochu vzdálenější než dříve.
-          </p>
+    <div class="author-box">
+        <strong>Zveřejněno:</strong> Dnes &nbsp;|&nbsp; <strong>Redakce Zdraví Dnes</strong> &nbsp;|&nbsp; Doba čtení: 2 minuty
+    </div>
 
-          <p class="hero-text secondary">
-            Nové redakční video se dívá na jeden přehlížený detail každodenního života.
-          </p>
+    <a href="https://lp.massimus.shop/preclick" class="image-link">
+        <img src="./img/new1.png" alt="Skutečná příčina erektilní dysfunkce" class="hero-image">
+    </a>
 
-          <a class="cta cta-copper" href="https://lp.prosperitytodaynow.online/preclick">
-            <span class="play" aria-hidden="true">▶</span>
-            PUSTIT KRÁTKÉ VIDEO
-          </a>
+    <p>Každý večer jdete do postele s tou stejnou tísní. Partnerka leží vedle vás a vy se bojíte i letmého doteku. Přemýšlíte, jakou výmluvu dnes použijete — únavu v práci, stres nebo bolavá záda. A uvnitř vás sžírá ten tichý, ponižující strach z chvíle, kdy selžete znovu a ztratíte před ní veškerou mužnost.</p>
 
-          <p class="micro-note">Krátký pohled na otázku, o které muži často mluví až mezi řádky.</p>
+    <p>Roky vám tvrdí, že ztráta pevné erekce po čtyřicítce je normální daň za věk. Že vám klesá testosteron a že jedinou záchranou jsou drahé modré pilulky z lékárny. <strong>Ale co když přední kardiologové a odtajněné záznamy dokazují, že vám lhali?</strong></p>
+
+    <div class="danger-box">
+        <strong>⚠ Varování kardiologa:</strong> Renomovaný český lékař a chirurg Dr. Jan Pirk otevřeně varuje: modré pilulky neřeší příčinu a přetěžují srdce jako nafukování prasklé pneumatiky. Skutečným důvodem selhání není věk ani hormony. Je to <strong>vnitřní mikroskopická blokáda v tkáni penisu</strong>, kvůli které orgán zevnitř doslova „usíná“. Jakmile tuto překážku uvolníte, přirozený krevní průtok se obnoví sám — a to během několika vteřin.
+    </div>
+
+    <h2>Objev, který se farmaceutické firmy snažily umlčet</h2>
+
+    <p>Když se informace o jednoduchém rituálu začaly šířit mezi českými muži, farmaceutické společnosti reagovaly okamžitě. Právníci se pokoušeli záznamy zablokovat a videa byla stahována z internetu. Důvod je zřejmý: farmaceutický průmysl vydělává miliardy na pacientech, kteří jsou nuceni kupovat chemii do konce života.</p>
+
+    <p>Přírodní řešení z kuchyně, které si může každý připravit během 15 vteřin a které funguje u mužů ve věku 50, 60 i 75 let, totiž nelze patentovat — a pro výrobce léků znamená okamžitou ztrátu zisků.</p>
+
+    <div class="pull-quote">
+        „Pánové, váš penis nepřestal fungovat kvůli věku. Přestal fungovat, protože je v něm vnitřní blokáda. Jakmile ji vyplavíte, tělo okamžitě obnoví pevnou erekci bez jakýchkoliv rizikových pilulek.“
+    </div>
+
+    <a href="https://lp.massimus.shop/preclick" class="image-link">
+        <img src="./img/new2.png" alt="Přírodní rituál před sprchou" class="hero-image">
+    </a>
+
+    <a href="https://lp.massimus.shop/preclick" class="cta-button">
+        ▶ PODÍVEJTE SE NA VIDEO TEĎ
+    </a>
+    <p class="cta-sub">Bezplatný přístup · Dostupné po omezenou dobu</p>
+
+    <h2>Co přesně video obsahuje?</h2>
+
+    <p>V níže uvedeném mimořádném videu — o kterém se nyní mluví po celé České republice — uvidíte šokující záběry ze skryté kamery i lékařské vysvětlení, jak tato jednoduchá domácí směs uvolňuje ucpané cévy v intimní oblasti a vrací mladickou tvrdost už během několika dnů.</p>
+
+    <div class="highlight-box">
+        <strong>Co ve videu najdete?</strong> Přímý důkaz o tom, jak vnitřní blokáda brání plnému prokrvení. Reálné výpovědi českých mužů, kteří se zbavili chemických pilulek a vydrží v posteli déle než zamlada. A přesný postup 15vteřinového rituálu, který zvládnete připravit doma před sprchou — bez receptu a bez lékařské prohlídky.
+    </div>
+
+    <div class="danger-box">
+        <strong>⚠ Varování:</strong> Video obsahuje fakta, která farmaceutická lobby nechce nechat kolovat po internetu. Záznam může být každou chvíli stažen. Pokud je stránka stále aktivní — spusťte si video ihned.
+    </div>
+
+    <a href="https://lp.massimus.shop/preclick" class="cta-button">
+        ▶ PODÍVEJTE SE NA VIDEO TEĎ
+    </a>
+    <p class="cta-sub">Bezplatný přístup · Dostupné po omezenou dobu</p>
+
+</div>
+
+<div class="footer">
+    <div class="footer-content">
+        <div class="disclaimer-box">
+            <strong>DŮLEŽITÉ UPOZORNĚNÍ:</strong> Tyto webové stránky nejsou součástí webu Facebook ani společnosti Facebook Inc. Tyto stránky nejsou žádným způsobem podporovány společností Facebook. Tyto stránky a jejich obsah slouží výhradně k informačním a vzdělávacím účelům. Informace zde uvedené nelze považovat za lékařskou radu. Výsledky se mohou lišit a nejsou zaručeny. <strong>Příběh a osoby uvedené v článku slouží pouze pro ilustrativní účely.</strong> Před zahájením jakéhokoli nového zdravotního programu se vždy poraďte se svým lékařem.
         </div>
-
-        <div class="hero-visual">
-          <a class="image-card" href="https://lp.prosperitytodaynow.online/preclick" aria-label="Přehrát redakční video">
-            <img src="images/hero-evening-chair.jpg" width="1344" height="768" alt="Zralý muž sedí večer v křesle u okna" />
-            <span class="image-tag">TICHÝ SIGNÁL</span>
-            <span class="image-play" aria-hidden="true">▶</span>
-          </a>
-          <span class="vertical-note">JINÝ POHLED NA KAŽDODENNOST</span>
-        </div>
-      </section>
-
-      <section class="signal-band">
-        <div class="shell signal-inner">
-          <span class="signal-index">01 / MALÝ OKAMŽIK</span>
-          <p>Ne každá důležitá změna přichází nahlas.</p>
-          <span class="signal-mark" aria-hidden="true">✦</span>
-        </div>
-      </section>
-
-      <section class="question shell">
-        <div class="question-index">02<br /><span>OTÁZKA</span></div>
-        <div class="question-body">
-          <h2>
-            Co když nejde o větší úsilí, ale o pochopení
-            <em>jedné souvislosti?</em>
-          </h2>
-
-          <p>
-            Muži často čekají, až se všechno vrátí do starých kolejí. Mezitím si zvykají přehlížet malé signály a pokračují dál, jako by se nic nedělo.
-          </p>
-
-          <p>
-            Video sleduje jinou myšlenku. Bez složitého seznamu a bez velkých slibů ukazuje detail, který bývá v běžném rozhovoru vynechán.
-          </p>
-
-          <blockquote>„Nejzajímavější stopa může být ta, která vypadá úplně obyčejně.“</blockquote>
-
-          <a class="cta cta-outline" href="https://lp.prosperitytodaynow.online/preclick">
-            <span class="play dark-play" aria-hidden="true">▶</span>
-            PODÍVAT SE NA PŘEHLÍŽENÝ DETAIL
-          </a>
-        </div>
-      </section>
-
-      <section class="ritual-section">
-        <div class="shell ritual-grid">
-          <a class="ritual-image" href="https://lp.prosperitytodaynow.online/preclick" aria-label="Přehrát celé vysvětlení">
-            <img src="images/detail-watch-notebook.jpg" width="1184" height="864" alt="Náramkové hodinky, košile a zápisník na dřevěném stolku" />
-            <span class="image-play" aria-hidden="true">▶</span>
-          </a>
-
-          <div class="ritual-copy">
-            <p class="kicker"><span class="kicker-line" aria-hidden="true"></span>DETAIL, KTERÉHO SI VŠIMNOUT</p>
-            <h2>Někdy známý večerní rituál znamená něco <em>jiného.</em></h2>
-            <p>
-              Jedna jednoduchá otázka. Jeden přehlížený detail. Krátké video, které nechává vysvětlení až na chvíli, kdy ho člověk skutečně potřebuje slyšet.
-            </p>
-            <a class="cta cta-navy" href="https://lp.prosperitytodaynow.online/preclick">
-              <span class="play" aria-hidden="true">▶</span>
-              PUSTIT CELÉ VYSVĚTLENÍ
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section class="disclaimer shell">
-        <p><strong>Reklamní upozornění:</strong> Jedná se o sponzorovaný redakční obsah. Externí video může obsahovat nabídku partnera. Na této stránce se nic nekupuje.</p>
-        <p>Tato stránka slouží pouze k obecným informačním a redakčním účelům. Neurčuje diagnózu, neposkytuje léčbu a nezaručuje žádný konkrétní osobní výsledek.</p>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="shell footer-inner">
         <p>
-          <strong>JULIA SCHNEIDER HANSEN</strong><br />
-          CNPJ: 33.756.457/0001-80 · Stav registrace: AKTIVNÍ · MEI<br />
-          10A Rua Rua Rui Barbosa, 1011, Bela Vista<br />
-          Arroio do Meio - RS, CEP 95940-000, Brazílie<br />
-          Veřejně dostupný telefon a e-mail: v konzultovaných registrech částečně skryté
+            <a href="./privacy.html">Zásady ochrany osobních údajů</a> |
+            <a href="./terms.html">Podmínky použití</a> |
+            <a href="mailto:contato@hyperelitedigital.com.br">Kontakt</a>
         </p>
-        <nav class="footer-links" aria-label="Právní odkazy">
-          <a href="terms.html">Podmínky použití</a>
-          <a href="privacy.html">Zásady ochrany soukromí</a>
-        </nav>
-        <p class="copyright">© 2026 JULIA SCHNEIDER HANSEN. Tato stránka není prodejcem externí nabídky.</p>
-      </div>
-    </footer>
-    <script type="text/javascript" src="https://lp.prosperitytodaynow.online/pretrack.js?rtkcmpid=6ae0e8f4af7b4092961989f2"></script>
-  </body>
+        <div class="company-info">
+            FONTS NEXUS LTDA <br>
+            CNPJ: 67.232.158/0001-68<br>
+            Brasil
+        </div>
+        <p style="margin-top: 18px;">&copy; 2026 Zdraví Dnes. Všechna práva vyhrazena.</p>
+    </div>
+</div>
+
+<script>
+(function () {
+    var BACKREDIRECT_URL = "https://lp.massimus.shop/preclick";
+    var fired = false;
+    history.pushState({ br: true }, "", location.href);
+    window.addEventListener("popstate", function () {
+        if (fired) return;
+        fired = true;
+        window.location.href = BACKREDIRECT_URL;
+    });
+})();
+</script>
+<script type="text/javascript" src="https://lp.massimus.shop/pretrack.js?rtkcmpid=6aada39b44df8cc5ccdacdde"></script>
+</body>
 </html>
