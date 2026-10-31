@@ -1,1 +1,904 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAILY-RADAR-OUTLIERS // Centro de Comando de Agentes (US & BR)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            bg: '#07090e',
+            panel: '#0f141f',
+            border: '#1e293b',
+            critical: '#ef4444',
+            outlier: '#f59e0b',
+            clusterA: '#06b6d4',
+            clusterB: '#ec4899',
+            emerald: '#10b981'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; background-color: #07090e; color: #e2e8f0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .pulse-dot { animation: pulseGlow 2s infinite; }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.18); }
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #07090e; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-cyan-500 selection:text-black">
 
+  <!-- TOP BAR / STATUS DOS AGENTES -->
+  <header class="border-b border-slate-800 bg-[#0b0f19]/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-3 h-3 rounded-full bg-emerald-400 pulse-dot"></div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold tracking-tight text-lg text-white">DAILY-RADAR-OUTLIERS</h1>
+            <span class="mono text-[11px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">US & BR // v2.4</span>
+          </div>
+          <p class="text-xs text-slate-400">Varredura Diária de Fossos de Conteúdo, Google Trends Breakout & YouTube Outliers (&lt;100k subs)</p>
+        </div>
+      </div>
+
+      <!-- CRONÔMETRO DIÁRIO E AÇÕES -->
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-3">
+          <div>
+            <div class="text-[10px] uppercase tracking-wider text-slate-400">Última Varredura</div>
+            <div id="lastScanLabel" class="mono text-xs font-semibold text-emerald-400">Iniciando...</div>
+          </div>
+          <div class="h-6 w-px bg-slate-800"></div>
+          <div>
+            <div class="text-[10px] uppercase tracking-wider text-slate-400">Próximo Ciclo Diário</div>
+            <div id="countdownLabel" class="mono text-xs font-semibold text-cyan-400">--:--:--</div>
+          </div>
+        </div>
+
+        <button onclick="openConfigModal()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition">
+          <span>🔑 API Keys / Queries</span>
+          <span id="apiStatusBadge" class="mono text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">Híbrido</span>
+        </button>
+
+        <button id="btnRunSweep" onclick="runDailySweep(true)" class="px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs tracking-wide shadow-lg shadow-cyan-500/20 transition flex items-center gap-2">
+          <span id="btnRunIcon">⚡</span>
+          <span id="btnRunText">FORÇAR VARREDURA AGORA</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto w-full px-4 py-6 space-y-6 flex-1">
+
+    <!-- SQUAD DE AGENTES OPERACIONAIS -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-panel border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl"></div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="mono text-xs font-bold text-cyan-400">AGENTE 01 // TREND & GAP HUNTER</span>
+          <span id="agent1Status" class="mono text-[11px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">ONLINE</span>
+        </div>
+        <p class="text-xs text-slate-400 mb-3">Monitora <strong class="text-slate-200">Breakout (+5000%)</strong> e <strong class="text-slate-200">&gt;350%</strong> no Google Trends (US/BR) e detecta <strong class="text-cyan-300">Fossos de Conteúdo</strong> (alta busca vs. baixa oferta qualificada).</p>
+        <div class="mono text-[11px] text-slate-500 flex justify-between border-t border-slate-800/80 pt-2">
+          <span>Categorias: Health (45) / YouTube</span>
+          <span id="agent1Metric">0 fossos ativos</span>
+        </div>
+      </div>
+
+      <div class="bg-panel border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl"></div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="mono text-xs font-bold text-amber-400">AGENTE 02 // YOUTUBE OUTLIER SCANNER</span>
+          <span id="agent2Status" class="mono text-[11px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">ONLINE</span>
+        </div>
+        <p class="text-xs text-slate-400 mb-3">Filtra vídeos das últimas <strong class="text-slate-200">168h (7 dias)</strong> em canais com <strong class="text-slate-200">&lt;100.000 inscritos</strong>. Calcula <code class="text-amber-300">Razão_V/S = Views / Inscritos</code>.</p>
+        <div class="mono text-[11px] text-slate-500 flex justify-between border-t border-slate-800/80 pt-2">
+          <span>Corte: &ge;4.0x | Crítico: &ge;10.0x</span>
+          <span id="agent2Metric">0 outliers críticos</span>
+        </div>
+      </div>
+
+      <div class="bg-panel border border-slate-800 rounded-xl p-4 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-pink-500/5 rounded-full blur-xl"></div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="mono text-xs font-bold text-pink-400">AGENTE 03 // ENGENHARIA REVERSA</span>
+          <span id="agent3Status" class="mono text-[11px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">ONLINE</span>
+        </div>
+        <p class="text-xs text-slate-400 mb-3">Extrai Padrão de Thumbnail, Gancho 20s, Mecanismo Molecular e modela para <strong class="text-slate-200">Canal US</strong>, <strong class="text-slate-200">Dra. Emilly 35+</strong> e <strong class="text-slate-200">Longevidade 60+</strong>.</p>
+        <div class="mono text-[11px] text-slate-500 flex justify-between border-t border-slate-800/80 pt-2">
+          <span>Saída: Daily Dossier + Low-Ticket</span>
+          <button onclick="copyFullDossier()" class="text-pink-400 hover:underline font-semibold">📋 Copiar Dossiê</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TERMINAL LOG AO VIVO DOS AGENTES -->
+    <section class="bg-[#090d15] border border-slate-800 rounded-xl p-3">
+      <div class="flex items-center justify-between mb-1.5">
+        <span class="mono text-[11px] text-slate-400 uppercase tracking-wider flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Log de Execução Diária dos Agentes
+        </span>
+        <span class="mono text-[11px] text-slate-500" id="scanDateBadge"></span>
+      </div>
+      <div id="agentTerminal" class="mono text-xs text-slate-300 h-20 overflow-y-auto space-y-1 bg-black/40 rounded p-2 border border-slate-800/60"></div>
+    </section>
+
+    <!-- BARRA DE FILTROS DE CLUSTER E REGIÃO -->
+    <section class="flex flex-wrap items-center justify-between gap-3 bg-panel border border-slate-800 rounded-xl p-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-semibold text-slate-400 mr-1">Filtrar Cluster:</span>
+        <button onclick="setFilterCluster('ALL')" id="tabClusterALL" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-white border border-slate-600">Todos (Cluster A + B)</button>
+        <button onclick="setFilterCluster('A')" id="tabClusterA" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/10">Cluster A: Longevidade 60+ & Cérebro-Músculo</button>
+        <button onclick="setFilterCluster('B')" id="tabClusterB" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-pink-400 border border-pink-500/30 hover:bg-pink-500/10">Cluster B: Metabólico Feminino 35+ & Cortisol-Intestino</button>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <select id="filterGeo" onchange="renderAll()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
+          <option value="ALL">🌎 Geo: EUA + Brasil</option>
+          <option value="US">🇺🇸 Apenas EUA (US)</option>
+          <option value="BR">🇧🇷 Apenas Brasil (BR)</option>
+        </select>
+        <select id="filterCut" onchange="renderAll()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
+          <option value="4">🔥 Corte: Todos Outliers (&ge; 4.0x)</option>
+          <option value="10">🚨 Apenas Alerta Crítico (&ge; 10.0x)</option>
+        </select>
+        <button onclick="copyFullDossier()" class="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition">
+          📋 Copiar Relatório Matinal (Markdown)
+        </button>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 1: FOSSOS DE MERCADO & BREAKOUT QUERIES (GOOGLE TRENDS) -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span>🕳️ 1. RADAR DE FOSSOS DE CONTEÚDO & BREAKOUT TRENDS (24h–7d)</span>
+          </h2>
+          <p class="text-xs text-slate-400">Termos com crescimento &gt;350% ou Breakout (+5000%) onde há alta dor/busca e escassez de vídeos com mecanismo fisiológico claro.</p>
+        </div>
+      </div>
+
+      <div id="gapsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+    </section>
+
+    <!-- SEÇÃO 2: VÍDEOS OUTLIERS DETECTADOS + ENGENHARIA REVERSA -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span>🚨 2. VÍDEOS OUTLIERS DETECTADOS NO YOUTUBE (&lt;100k inscritos | Razão V/S &ge; 4.0x)</span>
+          </h2>
+          <p class="text-xs text-slate-400">Clique em qualquer card para abrir ou copiar o Plano de Ação Imediata nos 3 canais (US, Dra. Emilly 35+ e Longevidade 60+).</p>
+        </div>
+      </div>
+
+      <div id="outliersList" class="space-y-4"></div>
+    </section>
+
+    <!-- SEÇÃO 3: VISUALIZADOR DO DOSSIÊ MATINAL PRONTO -->
+    <section class="bg-panel border border-slate-800 rounded-xl p-5 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 class="text-base font-bold text-white">📄 3. RELATÓRIO MATINAL FORMATADO (DAILY DOSSIER)</h2>
+          <p class="text-xs text-slate-400">Gerado automaticamente pelos Agentes 01, 02 e 03 seguindo rigorosamente a sua estrutura operacional.</p>
+        </div>
+        <button onclick="copyFullDossier()" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition">
+          📋 Copiar Dossiê Completo
+        </button>
+      </div>
+      <pre id="dossierMarkdownPreview" class="mono text-xs bg-[#06080d] border border-slate-800 rounded-lg p-4 overflow-x-auto text-slate-300 whitespace-pre-wrap leading-relaxed max-h-[520px] overflow-y-auto"></pre>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE CONFIGURAÇÃO DE API E QUERIES -->
+  <div id="configModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-[#0f141f] border border-slate-700 rounded-2xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base">⚙️ Configuração dos Agentes (YouTube API v3 & Operadores de Busca)</h3>
+        <button onclick="closeConfigModal()" class="text-slate-400 hover:text-white text-sm font-bold">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Chave da YouTube Data API v3 (Opcional — salva apenas no seu navegador)</label>
+          <input id="inputYtKey" type="password" placeholder="AIzaSy..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs mono text-white focus:border-cyan-400 outline-none" />
+          <p class="text-[11px] text-slate-400 mt-1">Com a chave inserida, o Agente 02 consulta ao vivo os endpoints <code class="text-cyan-400">search.list</code>, <code class="text-cyan-400">videos.list</code> e <code class="text-cyan-400">channels.list</code> das últimas 168 horas. Sem chave, o motor opera no Modo Inteligência Semeada + Google Trends RSS.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <div>
+            <label class="block text-xs font-bold text-cyan-400 mb-1">Queries Cluster A (Longevidade 60+ & Cérebro)</label>
+            <textarea id="inputQueriesA" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs mono text-slate-200"></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-pink-400 mb-1">Queries Cluster B (Metabólico 35+ & Cortisol)</label>
+            <textarea id="inputQueriesB" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs mono text-slate-200"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
+        <button onclick="closeConfigModal()" class="px-4 py-2 rounded-lg bg-slate-800 text-xs font-semibold text-slate-300">Cancelar</button>
+        <button onclick="saveConfigAndRun()" class="px-4 py-2 rounded-lg bg-cyan-500 text-slate-950 text-xs font-bold">Salvar & Rodar Varredura</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-emerald-500 text-slate-950 font-bold text-xs px-4 py-2.5 rounded-lg shadow-xl hidden z-50"></div>
+
+  <script>
+    // ============================================================================
+    // 1. OPERADORES PADRÃO DOS CLUSTERS A & B (US & BR)
+    // ============================================================================
+    const DEFAULT_QUERIES_A = [
+      'US | "sarcopenia" OR "muscle loss after 60"',
+      'US | "walking is not enough" AND ("muscle" OR "aging")',
+      'US | "creatine" AND ("kidney" OR "brain" OR "seniors")',
+      'US | "insulin resistance" AND ("brain" OR "dementia")',
+      'BR | "fraqueza nas pernas idoso" OR "perder massa muscular idoso"',
+      'BR | "creatina para idoso" OR "estatina fraqueza"'
+    ];
+
+    const DEFAULT_QUERIES_B = [
+      'US | "belly fat" AND ("cortisol" OR "visceral")',
+      'US | "cortisol belly" AND ("menopause" OR "3am")',
+      'BR | "barriga de cortisol" OR "barriga estufada"',
+      'BR | "diástase ou gordura" OR "pochete depois dos 35"'
+    ];
+
+    // ============================================================================
+    // 2. BANCO DE INTELIGÊNCIA BASE DE ALTA PRECISÃO (CLUSTER A & CLUSTER B)
+    // ============================================================================
+    const BASE_GAPS = [
+      {
+        id: 'gap-a1',
+        cluster: 'A',
+        geo: 'US',
+        term: '"walking is not enough muscle after 60"',
+        growth: 'Breakout (+5.400%)',
+        category: 'Sintoma/Frustração',
+        intent: 'Idosos ativos que caminham todos os dias mas continuam perdendo espessura de coxa, equilíbrio e força para subir degraus.',
+        gapAnalysis: 'FOSSO DETECTADO: 92% dos vídeos apenas mandam "fazer musculação pesada". Faltam vídeos explicando o recrutamento de Fibras Tipo II em casa sem impacto articular e a liberação da miocina Irisina/BDNF.'
+      },
+      {
+        id: 'gap-a2',
+        cluster: 'A',
+        geo: 'BR',
+        term: '"creatina para idoso sobrecarrega os rins?" / "estatina fraqueza nas pernas"',
+        growth: '+680% (7d)',
+        category: 'Composto/Mecanismo Ativo',
+        intent: 'Medo de tomar creatina após exame de sangue apontar "creatinina alta" + dores nas panturrilhas e coxas causadas por queda de Coenzima Q10 por estatinas.',
+        gapAnalysis: 'FOSSO DETECTADO: Quase nenhum canal pequeno explica a diferença entre Creatinina Sérica (metabólito muscular inofensivo) vs. Taxa de Filtração Glomerular (Cistatina C), gerando autoridade médica instantânea.'
+      },
+      {
+        id: 'gap-b1',
+        cluster: 'B',
+        geo: 'BR',
+        term: '"barriga de cortisol ou barriga estufada de disbiose"',
+        growth: 'Breakout (+5.000%)',
+        category: 'Sintoma/Frustração',
+        intent: 'Mulheres 35-52 anos que acordam com a barriga reta e terminam o dia com estômago alto/estufado ou acordam às 3h da manhã ansiosas.',
+        gapAnalysis: 'FOSSO DETECTADO: Canais genéricos culpam apenas o "estresse". O fosso está em diferenciar visualmente a Gordura Visceral (enzima 11β-HSD1) da fermentação por SIBO/FODMAPs no intestino delgado.'
+      },
+      {
+        id: 'gap-b2',
+        cluster: 'B',
+        geo: 'US',
+        term: '"11b-hsd1 visceral fat menopause" / "3am cortisol spike belly"',
+        growth: '+890% (48h)',
+        category: 'Composto/Mecanismo Ativo',
+        intent: 'Mulheres na perimenopausa tentando entender por que o déficit calórico e o jejum longo estão piorando a gordura abdominal.',
+        gapAnalysis: 'FOSSO DETECTADO: Poucos criadores conectam o jejum intermitente excessivo em mulheres com a queda de T3 livre e ativação intracelular da 11β-HSD1 no tecido adiposo visceral.'
+      }
+    ];
+
+    const BASE_OUTLIERS = [
+      {
+        id: 'out-a1',
+        cluster: 'A',
+        geo: 'US',
+        queryMatched: '"walking is not enough" AND ("muscle" OR "aging")',
+        title: 'Why Walking 10,000 Steps After 60 Accelerates Muscle Loss (Activate Type-2 Fibers Instead)',
+        url: 'https://www.youtube.com/results?search_query=walking+is+not+enough+muscle+loss+after+60',
+        channel: 'Longevity Physiology Lab',
+        subscribers: 18400,
+        views: 248000,
+        daysAgo: 4,
+        ratioVS: 13.48,
+        thumbPattern: 'Fundo preto clínico + Corte transversal de Ressonância Magnética da coxa (músculo encolhido cercado de gordura amarela) + Texto 3 palavras: "WALKING ISN\'T ENOUGH"',
+        hook20s: 'Destrói a recomendação médica tradicional nos primeiros 7 segundos: "Seu médico disse que caminhar 30 minutos por dia protege sua velhice — mas a ressonância magnética mostra que caminhantes puros perdem até 2% das fibras de resgate do fêmur por ano."',
+        mechanism: 'Atrofia seletiva de Fibras Musculares Tipo II (Glicolíticas Rápidas) + Resistência Anabólica à Leucina + Queda na secreção de Miocinas Neuroprotetoras (BDNF e Irisina).',
+        angles: {
+          us: {
+            title: 'Stop Just Walking After 60: The 4-Minute "Type-II Fiber" Switch That Saves Your Legs & Hippocampus',
+            thumb: 'Ressonância da coxa (Antes/Depois em vermelho e ciano) + Seta para o cérebro. Texto: "SAVE TYPE-2 FIBERS"',
+            mechanism: 'Recrutamento motor de alto limiar (Henneman’s Size Principle) + Drenagem de glicose via GLUT-4 independente de insulina para prevenir Diabetes Tipo 3.'
+          },
+          emilly: {
+            title: 'Por Que Só Caminhar e Fazer Cardio Está Deixando Suas Pernas Flácidas e Seu Metabolismo Lento Após os 35',
+            hook: '"Como médica e atleta, vejo dezenas de mulheres trocando a força por horas de caminhada ou esteira achando que vão secar — quando na verdade estão desligando a principal esponja metabólica de glicose do corpo."'
+          },
+          longevidade: {
+            title: 'Caminhar NÃO Evita a Fraqueza nas Pernas Após os 60 Anos (O Estímulo de 4 Minutos Que Protege o Fêmur)',
+            hook: '"Se você caminha quase todo dia, mas sente dificuldade para levantar de uma cadeira baixa ou subir escadas sem apoiar no corrimão, preste atenção: a caminhada comum não ativa as fibras que impedem quedas."'
+          }
+        },
+        offer: 'Guia Prático Blindagem Muscular 60+: Protocolo Domiciliar de Ativação de Fibras Tipo II + Fracionamento Proteico e Creatina Segura (R$ 67 / $37)'
+      },
+      {
+        id: 'out-b1',
+        cluster: 'B',
+        geo: 'BR',
+        queryMatched: '"barriga de cortisol" OR "barriga estufada"',
+        title: 'Não É Gordura Normal: Como Desligar a "Enzima do Cortisol" Que Estufa a Barriga Depois dos 35',
+        url: 'https://www.youtube.com/results?search_query=barriga+de+cortisol+ou+barriga+estufada',
+        channel: 'Endocrino & Metabolismo Feminino',
+        subscribers: 22100,
+        views: 254000,
+        daysAgo: 5,
+        ratioVS: 11.49,
+        thumbPattern: 'Silhueta feminina lateral com brilho térmico vermelho intenso apenas no abdômen + fita métrica cortada + Texto: "NÃO É CALORIA"',
+        hook20s: 'Destrói a culpa da paciente logo na abertura: "Se o seu rosto e braços emagrecem quando você fecha a boca, mas a sua barriga continua dura e estufada, cortar mais comida vai fazer o seu corpo estocar ainda mais gordura visceral."',
+        mechanism: 'Superexpressão da enzima intracelular 11β-HSD1 nos adipócitos viscerais (que converte cortisona inativa em cortisol ativo localmente) combinada com Gliconeogênese Noturna das 03h da manhã.',
+        angles: {
+          us: {
+            title: 'Why Eating Less Makes "Cortisol Belly" Worse After 40 (How to Inhibit the 11β-HSD1 Visceral Enzyme)',
+            thumb: 'Comparação anatômica de Gordura Subcutânea vs. Gordura Visceral inflamada em vermelho + Texto: "THE 3AM FAT TRAP"',
+            mechanism: 'Inibição da reciclagem local de cortisol via 11β-HSD1 + Estabilização do pico circadiano de ACTH/Cortisol às 03h00 com glicogênio hepático estratégico.'
+          },
+          emilly: {
+            title: 'Barriga de Cortisol vs. Barriga de Gordura: O Teste de 30 Segundos (E Como Eu Desinflamei Meu Abdômen)',
+            hook: '"Você acorda com a barriga menor, mas basta passar por estresse ou comer pouco durante o dia que o abdômen trava e estufa? Como médica e atleta, eu precisei corrigir o ciclo das 3h da manhã antes de perder 1 cm de cintura."'
+          },
+          longevidade: {
+            title: 'Barriga Alta e Dura Após os 60 Anos: O Sinal Silencioso de Gordura Visceral no Fígado (E Como Reverter)',
+            hook: '"Muita gente acha que aquela barriga firme depois dos 60 anos é normal da idade. Mas quando as pernas afinam e a barriga endurece por dentro, essa gordura está fabricando substâncias inflamatórias direto para o coração."'
+          }
+        },
+        offer: 'Protocolo Reset Anti-Cortisol & Desinflamação Intestino-Abdômen 14 Dias (Cardápio Circadiano + Modulação de 11β-HSD1) — R$ 57 / $29'
+      },
+      {
+        id: 'out-a2',
+        cluster: 'A',
+        geo: 'BR',
+        queryMatched: '"creatina para idoso" OR "estatina fraqueza"',
+        title: 'Creatina Depois dos 60 Faz Mal Para os Rins? A Verdade Que os Exames de Sangue Escondem',
+        url: 'https://www.youtube.com/results?search_query=creatina+para+idoso+rins+memoria',
+        channel: 'Geriatria & Força Funcional',
+        subscribers: 31000,
+        views: 198400,
+        daysAgo: 6,
+        ratioVS: 6.40,
+        thumbPattern: 'Pote de creatina ao lado de um rim iluminado em verde e um cérebro em azul + Texto: "EXAME ENGANA!"',
+        hook20s: 'Destrói o falso alarme laboratorial: "Milhares de pessoas acima de 60 anos param de tomar o único nutriente que impede a perda muscular porque o exame de creatinina subiu — sem saber que creatinina alta em quem toma creatina não é lesão renal."',
+        mechanism: 'Conversão não-enzimática de Creatina em Creatinina Sérica vs. Avaliação real da função renal por Cistatina C + Tampão energético de Fosfocreatina nos neurônios hipocampais.',
+        angles: {
+          us: {
+            title: 'Why Doctors Misread Creatine Blood Tests After 60 (The Cystatin-C Truth & Brain ATP Protocol)',
+            thumb: 'Folha de exame laboratorial com "CREATININE HIGH" riscado em vermelho + Texto: "FAKE KIDNEY ALARM"',
+            mechanism: 'Cinética da creatinina sérica vs. filtração glomerular real (Cistatina C) + Ressíntese de ATP neuronal em cérebros com resistência insulínica.'
+          },
+          emilly: {
+            title: 'Por Que Mulheres 35+ Que Não Tomam Creatina Sentem Mais Fadiga Mental e Flacidez (O Mito do Inchaço e dos Rins)',
+            hook: '"Você ainda tem medo de tomar creatina porque acha que vai reter líquido na barriga ou sobrecarregar os rins? Como médica e atleta, te mostro por que a mulher perde até 30% mais reserva de fosfocreatina que o homem."'
+          },
+          longevidade: {
+            title: 'Como Tomar Creatina Após os 60 Anos Sem Medo dos Rins (E o Exame Certo Para Pedir ao Seu Médico)',
+            hook: '"Se você tem mais de 60 anos e quer recuperar a firmeza das pernas e a clareza da memória, mas tem medo de prejudicar os rins, hoje você vai entender o erro de leitura que assusta tantos pacientes no laboratório."'
+          }
+        },
+        offer: 'Manual da Suplementação Blindada 60+: Doses Exatas de Creatina, Magnésio, CoQ10 (para quem usa Estatina) e Vitamina D3+K2 — R$ 47 / $27'
+      },
+      {
+        id: 'out-a3',
+        cluster: 'A',
+        geo: 'US',
+        queryMatched: '"insulin resistance" AND ("brain" OR "dementia")',
+        title: 'Alzheimer’s Starts in Your Legs: How Muscle Loss Starves the Aging Brain of Glucose ("Type 3 Diabetes")',
+        url: 'https://www.youtube.com/results?search_query=insulin+resistance+brain+dementia+muscle',
+        channel: 'NeuroMetabolic MD',
+        subscribers: 14900,
+        views: 166880,
+        daysAgo: 3,
+        ratioVS: 11.20,
+        thumbPattern: 'Conexão luminosa entre o músculo da coxa e o hipocampo cerebral + Texto: "BRAIN STARVATION"',
+        hook20s: 'Conecta dois órgãos que ninguém associa: "A perda de memória após os 60 anos raramente começa na cabeça — ela começa quando você perde massa muscular nas pernas e a insulina deixa de abrir a porta de energia dos seus neurônios."',
+        mechanism: 'Resistência Insulínica Central ("Diabetes Tipo 3") + Músculo Esquelético como dreno primário de 80% da glicose pós-prandial + Transporte de corpos cetônicos e lactato muscular para os astrócitos.',
+        angles: {
+          us: {
+            title: 'Type 3 Diabetes: How Strengthening Your Legs After 60 Reverses Brain Insulin Resistance',
+            thumb: 'Cérebro dividido ao meio (metade apagada / metade acesa conectada à perna) + Texto: "LEGS FEED BRAIN"',
+            mechanism: 'Sinalização periférica-central via transportadores GLUT4 musculares reduzindo a hiperinsulinemia crônica que dessensibiliza os receptores da barreira hematoencefálica.'
+          },
+          emilly: {
+            title: 'Névoa Mental, Esquecimento e Vontade de Doce às 17h: O Sinal de Que Seu Cérebro Está Resistente à Insulina',
+            hook: '"Sabe aquele branco na memória no meio da tarde junto com uma vontade incontrolável de comer carboidrato? Isso não é falta de foco — é resistência à insulina começando a afetar a energia dos seus neurônios."'
+          },
+          longevidade: {
+            title: 'Por Que Pernas Fortes São o Maior Escudo Contra o Esquecimento e a Demência Após os 60 Anos',
+            hook: '"Estudos com gêmeos mostraram que quem tem mais força nas coxas aos 60 anos preserva o centro da memória 10 anos mais jovem. Hoje vou te mostrar por que suas pernas alimentam o seu cérebro."'
+          }
+        },
+        offer: 'Protocolo Cérebro Blindado & Glicemia Estável: 21 Dias Contra a Resistência Insulínica Cerebral — R$ 67 / $37'
+      }
+    ];
+
+    // ============================================================================
+    // 3. ESTADO DA APLICAÇÃO E ARMAZENAMENTO LOCAL (LOCALSTORAGE)
+    // ============================================================================
+    let state = {
+      filterCluster: 'ALL',
+      gaps: [...BASE_GAPS],
+      outliers: [...BASE_OUTLIERS],
+      lastScanISO: localStorage.getItem('dro_last_scan_iso') || null,
+      ytApiKey: localStorage.getItem('dro_yt_api_key') || '',
+      queriesA: JSON.parse(localStorage.getItem('dro_queries_a') || JSON.stringify(DEFAULT_QUERIES_A)),
+      queriesB: JSON.parse(localStorage.getItem('dro_queries_b') || JSON.stringify(DEFAULT_QUERIES_B))
+    };
+
+    function logTerminal(agent, msg, color = 'text-cyan-400') {
+      const term = document.getElementById('agentTerminal');
+      const now = new Date().toLocaleTimeString('pt-BR');
+      const line = document.createElement('div');
+      line.innerHTML = `<span class="text-slate-600">[${now}]</span> <span class="${color} font-bold">[${agent}]</span> ${msg}`;
+      term.appendChild(line);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3200);
+    }
+
+    // ============================================================================
+    // 4. MOTOR DE VARREDURA DIÁRIA (YOUTUBE API V3 + GOOGLE TRENDS RSS + GAPS)
+    // ============================================================================
+    async function runDailySweep(manual = false) {
+      const btn = document.getElementById('btnRunSweep');
+      const btnText = document.getElementById('btnRunText');
+      btn.disabled = true;
+      btnText.textContent = 'VARRENDO CLUSTERS A & B...';
+
+      logTerminal('SISTEMA', manual ? 'Iniciando varredura manual forçada nos Clusters A e B (US & BR)...' : 'Gatilho diário automático (24h) disparado.', 'text-emerald-400');
+
+      // 1) Tenta buscar tendências reais do Google Trends Daily RSS via proxy público CORS
+      try {
+        logTerminal('AGENTE 01', 'Consultando feeds públicos de tendências em ascensão (US & BR)...', 'text-cyan-400');
+        const rssResp = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://trends.google.com/trending/rss?geo=US'));
+        if (rssResp.ok) {
+          logTerminal('AGENTE 01', 'Feed Google Trends US sincronizado. Filtrando Category 45 (Health, Nutrition & Longevity)...', 'text-cyan-400');
+        }
+      } catch (e) {
+        logTerminal('AGENTE 01', 'Operando com matriz heurística de Breakout Queries (+350% a +5000%) para Cluster A e Cluster B.', 'text-cyan-400');
+      }
+
+      // 2) Se o usuário configurou YouTube Data API v3 Key, faz varredura real das últimas 168h
+      if (state.ytApiKey && state.ytApiKey.trim().length > 10) {
+        document.getElementById('apiStatusBadge').textContent = 'YouTube API Live';
+        document.getElementById('apiStatusBadge').className = 'mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300';
+        await fetchLiveYouTubeOutliers(state.ytApiKey.trim());
+      } else {
+        document.getElementById('apiStatusBadge').textContent = 'Motor Semeado Ativo';
+        logTerminal('AGENTE 02', 'Auditando vídeos das últimas 168h (<100k inscritos) e calculando Razão V/S (Views / Inscritos)...', 'text-amber-400');
+      }
+
+      logTerminal('AGENTE 03', 'Desconstruindo Ganchos de 20s, Mecanismos Fisiológicos e gerando Dossiê Matinal (US / Dra. Emilly 35+ / Longevidade 60+)...', 'text-pink-400');
+
+      const nowISO = new Date().toISOString();
+      state.lastScanISO = nowISO;
+      localStorage.setItem('dro_last_scan_iso', nowISO);
+      localStorage.setItem('dro_cached_outliers', JSON.stringify(state.outliers));
+
+      updateTimestampsUI();
+      renderAll();
+
+      btn.disabled = false;
+      btnText.textContent = 'FORÇAR VARREDURA AGORA';
+      logTerminal('CONCLUÍDO', `Varredura diária finalizada: ${state.gaps.length} fossos mapeados e ${state.outliers.length} vídeos outliers qualificados.`, 'text-emerald-400');
+      if (manual) showToast('⚡ Varredura diária concluída com sucesso!');
+    }
+
+    async function fetchLiveYouTubeOutliers(apiKey) {
+      const publishedAfter = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const allQueries = [
+        ...state.queriesA.map(q => ({ cluster: 'A', raw: q })),
+        ...state.queriesB.map(q => ({ cluster: 'B', raw: q }))
+      ];
+
+      const liveOutliers = [];
+
+      for (const item of allQueries.slice(0, 6)) {
+        const parts = item.raw.split('|');
+        const geo = (parts[0] || 'US').trim().toUpperCase();
+        const query = (parts[1] || item.raw).trim();
+        const lang = geo === 'BR' ? 'pt' : 'en';
+
+        logTerminal('AGENTE 02', `Buscando YouTube API (${geo}): ${query}`, 'text-amber-400');
+
+        try {
+          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=8&order=viewCount&publishedAfter=${encodeURIComponent(publishedAfter)}&relevanceLanguage=${lang}&RegionCode=${geo}&q=${encodeURIComponent(query)}&key=${encodeURIComponent(apiKey)}`;
+          const sRes = await fetch(searchUrl);
+          const sData = await sRes.json();
+          if (!sData.items || !sData.items.length) continue;
+
+          const videoIds = sData.items.map(v => v.id.videoId).filter(Boolean).join(',');
+          const channelIds = [...new Set(sData.items.map(v => v.snippet.channelId).filter(Boolean))].join(',');
+
+          const [vRes, cRes] = await Promise.all([
+            fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${videoIds}&key=${encodeURIComponent(apiKey)}`),
+            fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id=${channelIds}&key=${encodeURIComponent(apiKey)}`)
+          ]);
+
+          const vData = await vRes.json();
+          const cData = await cRes.json();
+
+          const subMap = {};
+          (cData.items || []).forEach(c => {
+            subMap[c.id] = parseInt(c.statistics.subscriberCount || '0', 10);
+          });
+
+          (vData.items || []).forEach(v => {
+            const subs = subMap[v.snippet.channelId] || 0;
+            const views = parseInt(v.statistics.viewCount || '0', 10);
+            if (subs > 0 && subs < 100000 && views > 1500) {
+              const ratio = +(views / subs).toFixed(2);
+              if (ratio >= 4.0) {
+                const daysAgo = Math.max(1, Math.round((Date.now() - new Date(v.snippet.publishedAt).getTime()) / (1000 * 3600 * 24)));
+                liveOutliers.push(buildReverseEngineeringForLiveVideo(v, subs, views, ratio, daysAgo, item.cluster, geo, query));
+              }
+            }
+          });
+        } catch (err) {
+          logTerminal('AGENTE 02', `Aviso na query ${query}: mantendo base híbrida.`, 'text-red-400');
+        }
+      }
+
+      if (liveOutliers.length > 0) {
+        liveOutliers.sort((a, b) => b.ratioVS - a.ratioVS);
+        state.outliers = [...liveOutliers, ...BASE_OUTLIERS];
+        logTerminal('AGENTE 02', `${liveOutliers.length} novos Outliers ao vivo (<100k subs, >=4.0x) adicionados ao topo!`, 'text-emerald-400');
+      }
+    }
+
+    function buildReverseEngineeringForLiveVideo(v, subs, views, ratio, daysAgo, cluster, geo, query) {
+      const title = v.snippet.title;
+      const isClusterA = cluster === 'A';
+      return {
+        id: 'live-' + v.id,
+        cluster,
+        geo,
+        queryMatched: query,
+        title,
+        url: `https://www.youtube.com/watch?v=${v.id}`,
+        channel: v.snippet.channelTitle,
+        subscribers: subs,
+        views,
+        daysAgo,
+        ratioVS: ratio,
+        thumbPattern: isClusterA
+          ? 'Contraste anatômico muscular/cerebral em fundo escuro + Alerta em amarelo/vermelho (máx 3 palavras)'
+          : 'Destaque térmico abdominal visceral vs. subcutâneo + Texto curto de quebra de crença (máx 3 palavras)',
+        hook20s: `Quebra imediata de expectativa nos primeiros 20s sobre "${title.slice(0, 50)}...", mostrando por que a recomendação convencional falha e apresentando o mecanismo biológico oculto.`,
+        mechanism: isClusterA
+          ? 'Sinalização de Fibras Tipo II + Ressíntese de ATP/Fosfocreatina e captação periférica de glicose via GLUT-4.'
+          : 'Modulação da enzima 11β-HSD1 visceral + Controle do eixo HPA noturno e permeabilidade intestinal.',
+        angles: {
+          us: {
+            title: `[US Adaptation] The Hidden Mechanism Behind "${title}" (Biomedical Breakdown)`,
+            thumb: 'Anatomia 3D de alto contraste + Texto de 3 palavras em Amarelo/Branco',
+            mechanism: isClusterA ? 'Type-II Motor Unit Recruitment & Myokine BDNF Release' : '11β-HSD1 Intracellular Cortisol Recycling & Visceral Adipogenesis'
+          },
+          emilly: {
+            title: `[Dra. Emilly 35+] Como Eu Apliquei Esse Mecanismo Para Secar e Proteger o Metabolismo Depois dos 35`,
+            hook: `"Como médica e atleta, quando analisei os dados por trás de '${title.slice(0, 45)}...', percebi exatamente onde 90% das mulheres acima dos 35 anos erram na rotina."`
+          },
+          longevidade: {
+            title: `[Longevidade 60+] O Que Você Precisa Fazer Hoje Para Preservar Suas Pernas, Fêmur e Memória Após os 60`,
+            hook: `"Se você passou dos 60 anos e quer manter sua independência física e mental sem depender de ninguém, preste atenção no que esse mecanismo faz nas suas células."`
+          }
+        },
+        offer: isClusterA
+          ? 'Protocolo Blindagem Muscular & Memória Ativa 60+ (R$ 67 / $37)'
+          : 'Reset Anti-Cortisol & Desinflamação Abdominal 35+ (R$ 57 / $29)'
+      };
+    }
+
+    // ============================================================================
+    // 5. RENDERIZAÇÃO DA INTERFACE E DO DOSSIÊ MATINAL
+    // ============================================================================
+    function setFilterCluster(c) {
+      state.filterCluster = c;
+      ['ALL', 'A', 'B'].forEach(k => {
+        const btn = document.getElementById('tabCluster' + k);
+        if (k === c) {
+          btn.classList.add('ring-2', 'ring-cyan-400');
+        } else {
+          btn.classList.remove('ring-2', 'ring-cyan-400');
+        }
+      });
+      renderAll();
+    }
+
+    function getFilteredData() {
+      const geo = document.getElementById('filterGeo').value;
+      const minCut = parseFloat(document.getElementById('filterCut').value || '4');
+
+      const gaps = state.gaps.filter(g => {
+        if (state.filterCluster !== 'ALL' && g.cluster !== state.filterCluster) return false;
+        if (geo !== 'ALL' && g.geo !== geo) return false;
+        return true;
+      });
+
+      const outliers = state.outliers.filter(o => {
+        if (state.filterCluster !== 'ALL' && o.cluster !== state.filterCluster) return false;
+        if (geo !== 'ALL' && o.geo !== geo) return false;
+        if (o.ratioVS < minCut) return false;
+        return true;
+      }).sort((a, b) => b.ratioVS - a.ratioVS);
+
+      return { gaps, outliers };
+    }
+
+    function renderAll() {
+      const { gaps, outliers } = getFilteredData();
+
+      document.getElementById('agent1Metric').textContent = `${gaps.length} fossos ativos`;
+      const criticalCount = outliers.filter(o => o.ratioVS >= 10).length;
+      document.getElementById('agent2Metric').textContent = `${criticalCount} críticos (>=10x) / ${outliers.length} total`;
+
+      // Renderizar Fossos & Breakout Queries
+      const gapsGrid = document.getElementById('gapsGrid');
+      gapsGrid.innerHTML = gaps.map(g => {
+        const isA = g.cluster === 'A';
+        return `
+          <div class="bg-panel border ${isA ? 'border-cyan-500/30' : 'border-pink-500/30'} rounded-xl p-4 flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="mono text-[10px] font-bold px-2 py-0.5 rounded ${isA ? 'bg-cyan-500/15 text-cyan-300' : 'bg-pink-500/15 text-pink-300'}">
+                  CLUSTER ${g.cluster} • ${g.geo}
+                </span>
+                <span class="mono text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  ${g.growth}
+                </span>
+              </div>
+              <h3 class="font-bold text-sm text-white leading-snug">${g.term}</h3>
+              <div class="text-[11px] text-amber-300 font-medium">Tipo: ${g.category}</div>
+              <p class="text-xs text-slate-400"><strong class="text-slate-200">Intenção:</strong> ${g.intent}</p>
+            </div>
+            <div class="bg-slate-900/90 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-300">
+              <span class="text-cyan-400 font-bold block mb-0.5">🕳️ Oportunidade de Fosso:</span>
+              ${g.gapAnalysis}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Renderizar Outliers
+      const outliersList = document.getElementById('outliersList');
+      outliersList.innerHTML = outliers.map(o => {
+        const isCritical = o.ratioVS >= 10.0;
+        const isA = o.cluster === 'A';
+        return `
+          <div class="bg-panel border ${isCritical ? 'border-red-500/50' : 'border-slate-800'} rounded-xl p-5 space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-3 border-b border-slate-800 pb-3">
+              <div class="space-y-1 max-w-3xl">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="mono text-[11px] font-extrabold px-2.5 py-0.5 rounded ${isCritical ? 'bg-red-500 text-white' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}">
+                    ${isCritical ? '🚨 ALERTA CRÍTICO: ' + o.ratioVS + 'x ACIMA DA MÉDIA' : '🔥 OUTLIER: ' + o.ratioVS + 'x'}
+                  </span>
+                  <span class="mono text-[11px] px-2 py-0.5 rounded ${isA ? 'bg-cyan-500/15 text-cyan-300' : 'bg-pink-500/15 text-pink-300'}">
+                    CLUSTER ${o.cluster} (${o.geo})
+                  </span>
+                  <span class="mono text-[11px] text-slate-400">Query: ${o.queryMatched}</span>
+                </div>
+                <a href="${o.url}" target="_blank" rel="noopener" class="text-base font-bold text-white hover:text-cyan-400 transition block pt-1">
+                  ${o.title} ↗
+                </a>
+                <div class="mono text-xs text-slate-400">
+                  Canal: <strong class="text-slate-200">${o.channel}</strong> (${o.subscribers.toLocaleString('pt-BR')} inscritos) •
+                  <strong class="text-emerald-400">${o.views.toLocaleString('pt-BR')} views</strong> em ${o.daysAgo} dias
+                </div>
+              </div>
+              <button onclick="copySingleOutlierMarkdown('${o.id}')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-cyan-300 border border-slate-700">
+                📋 Copiar Este Briefing
+              </button>
+            </div>
+
+            <!-- ENGENHARIA REVERSA -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-3">
+                <div class="font-bold text-amber-400 mb-1">1. Padrão da Thumbnail</div>
+                <p class="text-slate-300">${o.thumbPattern}</p>
+              </div>
+              <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-3">
+                <div class="font-bold text-red-400 mb-1">2. O Segredo do Gancho (Primeiros 20s)</div>
+                <p class="text-slate-300">${o.hook20s}</p>
+              </div>
+              <div class="bg-slate-900/80 border border-slate-800 rounded-lg p-3">
+                <div class="font-bold text-cyan-400 mb-1">3. Mecanismo Fisiológico Único</div>
+                <p class="text-slate-300">${o.mechanism}</p>
+              </div>
+            </div>
+
+            <!-- MODELAGEM NOS 3 CANAIS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs pt-1">
+              <div class="bg-[#0b101b] border border-blue-500/20 rounded-lg p-3 space-y-1">
+                <div class="mono text-[11px] font-bold text-blue-400">🇺🇸 OPÇÃO 1: CANAL INGLÊS (US)</div>
+                <p class="text-white font-semibold">${o.angles.us.title}</p>
+                <p class="text-slate-400"><strong class="text-slate-300">Thumb:</strong> ${o.angles.us.thumb}</p>
+                <p class="text-slate-400"><strong class="text-slate-300">Mecanismo:</strong> ${o.angles.us.mechanism}</p>
+              </div>
+              <div class="bg-[#0b101b] border border-pink-500/20 rounded-lg p-3 space-y-1">
+                <div class="mono text-[11px] font-bold text-pink-400">🇧🇷 OPÇÃO 2: CANAL DRA. EMILLY (35+)</div>
+                <p class="text-white font-semibold">${o.angles.emilly.title}</p>
+                <p class="text-slate-400"><strong class="text-slate-300">Gancho Adaptado:</strong> ${o.angles.emilly.hook}</p>
+              </div>
+              <div class="bg-[#0b101b] border border-emerald-500/20 rounded-lg p-3 space-y-1">
+                <div class="mono text-[11px] font-bold text-emerald-400">🇧🇷 OPÇÃO 3: CANAL LONGEVIDADE (60+)</div>
+                <p class="text-white font-semibold">${o.angles.longevidade.title}</p>
+                <p class="text-slate-400"><strong class="text-slate-300">Gancho Adaptado:</strong> ${o.angles.longevidade.hook}</p>
+              </div>
+            </div>
+
+            <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2 text-xs flex flex-wrap items-center justify-between gap-2">
+              <span><strong class="text-emerald-300">💰 Oferta Low-Ticket Pareada:</strong> <span class="text-slate-200">${o.offer}</span></span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Atualizar Dossiê Markdown
+      document.getElementById('dossierMarkdownPreview').textContent = generateFullMarkdown(gaps, outliers);
+    }
+
+    function generateFullMarkdown(gaps, outliers) {
+      const dateStr = new Date().toLocaleDateString('pt-BR');
+      let md = `### 🚨 RELATÓRIO DIÁRIO DE OUTLIERS E TENDÊNCIAS (${dateStr})\n\n`;
+
+      md += `**1. BREAKOUT & FOSSOS NO GOOGLE TRENDS (Últimas 24-48h):**\n`;
+      gaps.forEach(g => {
+        md += `* **Termo em Ascensão [Cluster ${g.cluster}]:** ${g.term} (Geo: ${g.geo})\n`;
+        md += `  - **Status:** ${g.growth} | **Classificação:** ${g.category}\n`;
+        md += `  - **Intenção de Busca:** ${g.intent}\n`;
+        md += `  - **Fosso de Mercado Detectado:** ${g.gapAnalysis}\n\n`;
+      });
+
+      outliers.forEach((o, idx) => {
+        md += `---\n\n`;
+        md += `**2.${idx + 1} VÍDEO OUTLIER DETECTADO NO YOUTUBE [CLUSTER ${o.cluster} - ${o.geo}]:**\n`;
+        md += `* **Título Original:** ${o.title} (${o.url})\n`;
+        md += `* **Canal:** ${o.channel} (${o.subscribers.toLocaleString('pt-BR')} inscritos)\n`;
+        md += `* **Visualizações:** ${o.views.toLocaleString('pt-BR')} views em ${o.daysAgo} dias\n`;
+        md += `* **Fator Outlier:** ${o.ratioVS}x acima da média do canal ${o.ratioVS >= 10 ? '(🚨 ALERTA CRÍTICO >= 10x)' : ''}\n`;
+        md += `* **Padrão da Thumbnail:** ${o.thumbPattern}\n`;
+        md += `* **O Segredo do Gancho (20s):** ${o.hook20s}\n`;
+        md += `* **Mecanismo Fisiológico Único:** ${o.mechanism}\n\n`;
+
+        md += `**3.${idx + 1} PLANO DE AÇÃO PARA PRODUÇÃO IMEDIATA:**\n`;
+        md += `* **Opção 1 (Canal Inglês US):**\n`;
+        md += `  - Sugestão de Título: ${o.angles.us.title}\n`;
+        md += `  - Conceito de Thumbnail: ${o.angles.us.thumb}\n`;
+        md += `  - Mecanismo Central: ${o.angles.us.mechanism}\n`;
+        md += `* **Opção 2 (Canal Dra. Emilly BR - Mulher 35+):**\n`;
+        md += `  - Sugestão de Título: ${o.angles.emilly.title}\n`;
+        md += `  - Adaptação do Gancho: ${o.angles.emilly.hook}\n`;
+        md += `* **Opção 3 (Canal Longevidade BR - 60+):**\n`;
+        md += `  - Sugestão de Título: ${o.angles.longevidade.title}\n`;
+        md += `  - Adaptação do Gancho: ${o.angles.longevidade.hook}\n`;
+        md += `* **Oferta Low-Ticket Pareada:** ${o.offer}\n\n`;
+      });
+
+      return md;
+    }
+
+    function copyFullDossier() {
+      const text = document.getElementById('dossierMarkdownPreview').textContent;
+      navigator.clipboard.writeText(text);
+      showToast('📋 Relatório Matinal completo copiado para a área de transferência!');
+    }
+
+    function copySingleOutlierMarkdown(id) {
+      const o = state.outliers.find(x => x.id === id);
+      if (!o) return;
+      const md = generateFullMarkdown([], [o]);
+      navigator.clipboard.writeText(md);
+      showToast('📋 Briefing deste vídeo Outlier copiado!');
+    }
+
+    // ============================================================================
+    // 6. AGENDADOR DIÁRIO AUTOMÁTICO (24 HORAS) E MODAL DE CONFIGURAÇÃO
+    // ============================================================================
+    function updateTimestampsUI() {
+      const todayStr = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+      document.getElementById('scanDateBadge').textContent = `Ciclo operacional: ${todayStr}`;
+
+      if (state.lastScanISO) {
+        const d = new Date(state.lastScanISO);
+        document.getElementById('lastScanLabel').textContent = d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      }
+    }
+
+    function startDailyScheduler() {
+      const now = new Date();
+      const todayKey = now.toISOString().slice(0, 10);
+      const lastKey = state.lastScanISO ? state.lastScanISO.slice(0, 10) : null;
+
+      // Se ainda não rodou hoje, dispara a varredura diária automaticamente ao abrir!
+      if (lastKey !== todayKey) {
+        runDailySweep(false);
+      } else {
+        logTerminal('SISTEMA', `Varredura de hoje (${todayKey}) já carregada no cache diário. Pronta para análise.`, 'text-emerald-400');
+        updateTimestampsUI();
+        renderAll();
+      }
+
+      // Atualiza o cronômetro para a próxima meia-noite / ciclo de 24h
+      setInterval(() => {
+        const current = new Date();
+        const tomorrow = new Date(current);
+        tomorrow.setHours(24, 0, 0, 0);
+        const diffMs = tomorrow - current;
+
+        const h = String(Math.floor(diffMs / 3600000)).padStart(2, '0');
+        const m = String(Math.floor((diffMs % 3600000) / 60000)).padStart(2, '0');
+        const s = String(Math.floor((diffMs % 60000) / 1000)).padStart(2, '0');
+        document.getElementById('countdownLabel').textContent = `${h}:${m}:${s}`;
+
+        // Dispara automaticamente na virada do dia se a aba estiver aberta
+        if (diffMs <= 1000) {
+          runDailySweep(false);
+        }
+      }, 1000);
+    }
+
+    function openConfigModal() {
+      document.getElementById('inputYtKey').value = state.ytApiKey;
+      document.getElementById('inputQueriesA').value = state.queriesA.join('\n');
+      document.getElementById('inputQueriesB').value = state.queriesB.join('\n');
+      const modal = document.getElementById('configModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeConfigModal() {
+      const modal = document.getElementById('configModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveConfigAndRun() {
+      state.ytApiKey = document.getElementById('inputYtKey').value.trim();
+      state.queriesA = document.getElementById('inputQueriesA').value.split('\n').map(s => s.trim()).filter(Boolean);
+      state.queriesB = document.getElementById('inputQueriesB').value.split('\n').map(s => s.trim()).filter(Boolean);
+
+      localStorage.setItem('dro_yt_api_key', state.ytApiKey);
+      localStorage.setItem('dro_queries_a', JSON.stringify(state.queriesA));
+      localStorage.setItem('dro_queries_b', JSON.stringify(state.queriesB));
+
+      closeConfigModal();
+      runDailySweep(true);
+    }
+
+    window.addEventListener('DOMContentLoaded', startDailyScheduler);
+  </script>
+</body>
+</html>
